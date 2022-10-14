@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { Providers } from './providers/Providers';
+import { AllProviders } from '@providers/AllProviders';
 import { App } from './app/App';
 
 const root = document.getElementById('root');
@@ -12,9 +12,9 @@ if (!root) {
 } else {
 	ReactDOM.createRoot(root).render(
 		<React.StrictMode>
-			<Providers>
+			<AllProviders>
 				<App />
-			</Providers>
+			</AllProviders>
 		</React.StrictMode>
 	);
 }

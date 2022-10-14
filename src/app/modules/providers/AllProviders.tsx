@@ -5,6 +5,6 @@ type ProvidersProps = {
 	children: React.ReactNode;
 };
 
-export const Providers: React.FC<ProvidersProps> = ({ children }) => (
+export const AllProviders: React.FC<ProvidersProps> = ({ children }) => (
 	<ThemeProvider>{children}</ThemeProvider>
 );
