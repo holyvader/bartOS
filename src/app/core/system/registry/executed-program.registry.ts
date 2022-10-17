@@ -11,7 +11,12 @@ export class ExecutedProgramRegistry {
 	private observable = new ObservableService<RenderedProgramManifest<InjectableServiceImpl[]>>('pid');
 
 	add(manifests: ProgramManifest[]) {
-		this.observable.add(manifests.map(toExecutedProgramManifest));
+		this.observable.addMany(manifests.map(toExecutedProgramManifest));
+		return this;
+	}
+
+	remove(pids: string[]) {
+		this.observable.removeMany(pids);
 		return this;
 	}
 

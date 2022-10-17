@@ -9,6 +9,6 @@ export enum ProgramType {
 	WINDOW,
 	PURE
 }
-export type ProgramDefinition<SERVICES extends InjectableServiceImpl[]> = FC<{
+export type ProgramDefinition<SERVICES extends InjectableServiceImpl[] = []> = FC<{
 	dependencies?: SERVICES;
 }>;

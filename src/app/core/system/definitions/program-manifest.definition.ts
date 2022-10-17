@@ -11,6 +11,7 @@ interface ProgramManifestOptions<SERVICES extends InjectableServiceImpl[]> {
 	definition: ProgramDefinition<SERVICES>;
 	dependencies?: InjectableServiceName[];
 	runOnStartup?: boolean;
+	userExecutable?: boolean;
 }
 
 export interface RenderedProgramManifest<

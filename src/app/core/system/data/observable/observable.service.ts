@@ -1,5 +1,6 @@
 import { StoreService } from '@system/data/store/store.service';
 import * as ObservableTypes from '@system/data/observable/obervable.types';
+import { filterNotEmpty } from '@system/data-manipulation/collection/filter-not-empty';
 
 export class ObservableService<T extends object> {
 	private subscribers = new Map<
@@ -18,9 +19,16 @@ export class ObservableService<T extends object> {
 		return this;
 	}
 
-	add(data: T[]) {
+	addMany(data: T[]) {
 		this.store.setMany(data);
 		this.triggerEvent('add', data);
+		return this;
+	}
+
+	removeMany(ids: string[]) {
+		const elements = this.getManyById(ids);
+		this.store.removeMany(ids);
+		this.triggerEvent('remove', elements);
 		return this;
 	}
 
@@ -30,6 +38,10 @@ export class ObservableService<T extends object> {
 
 	get(id: string): T | undefined {
 		return this.store.getByKey(id);
+	}
+
+	getManyById(ids: string[]): T[] {
+		return filterNotEmpty(ids.map( it => this.store.getByKey(it)));
 	}
 
 	triggerEvent<TYPE extends ObservableTypes.EventType>(

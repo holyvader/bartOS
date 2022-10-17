@@ -2,13 +2,14 @@ import { useEffect, useRef, useState } from 'react';
 import { RenderedProgramManifest } from '@system/definitions/program-manifest.definition';
 import { system } from '@system/system';
 import { InjectableServiceImpl } from '@system/definitions/injectable-service.definition';
+import { useMount } from '@ui/utils/lifecycle/useMount';
 
 export function useProgramToRenderList() {
 	const [manifests, setManifests] = useState<RenderedProgramManifest<InjectableServiceImpl[]>[]>(
 		[]
 	);
 
-	useEffect(() => {
+	useMount(() => {
 		const unsubscribeAddEvent = system.executedProgramManager.subscribe(
 			'add',
 			(manifests) => {
@@ -26,10 +27,11 @@ export function useProgramToRenderList() {
 			}
 		);
 		return () => {
+			system.executedProgramManager.removeAll();
 			unsubscribeAddEvent?.();
 			unsubscribeRemoveEvent?.();
 		};
-	}, []);
+	});
 
 	return manifests;
 }

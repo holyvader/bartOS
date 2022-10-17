@@ -13,6 +13,16 @@ export class StoreService<T extends object> {
 		});
 	}
 
+	remove(id: string) {
+		this.store.delete(id);
+	}
+
+	removeMany(ids: string[]) {
+		ids.forEach((it) => {
+			this.remove(it);
+		});
+	}
+
 	getAll(): IterableIterator<T> {
 		return this.store.values();
 	}

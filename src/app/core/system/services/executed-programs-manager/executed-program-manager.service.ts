@@ -18,6 +18,10 @@ export class ExecutedProgramManagerService {
 		return this.programsToRender.get(pid);
 	}
 
+	removeAll() {
+		this.programsToRender.remove(Array.from(this.getAll()).map( it => it.pid));
+	}
+
 	subscribe: ExecutedProgramRegistry['subscribe'] = (type, observer) => {
 		return this.programsToRender.subscribe(type, observer);
 	};
