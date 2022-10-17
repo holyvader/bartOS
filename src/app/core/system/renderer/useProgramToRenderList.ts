@@ -1,22 +1,22 @@
 import { useEffect, useRef, useState } from 'react';
-import { RenderedProgramManifest } from '@system/definitions/program-manifest.definition';
+import { ProgramInstanceManifest } from '@system/definitions/program-manifest.definition';
 import { system } from '@system/system';
 import { InjectableServiceImpl } from '@system/definitions/injectable-service.definition';
 import { useMount } from '@ui/utils/lifecycle/useMount';
 
 export function useProgramToRenderList() {
-	const [manifests, setManifests] = useState<RenderedProgramManifest<InjectableServiceImpl[]>[]>(
+	const [manifests, setManifests] = useState<ProgramInstanceManifest<InjectableServiceImpl[]>[]>(
 		[]
 	);
 
 	useMount(() => {
-		const unsubscribeAddEvent = system.executedProgramManager.subscribe(
+		const unsubscribeAddEvent = system.programInstanceManager.subscribe(
 			'add',
 			(manifests) => {
 				setManifests((prevManifests) => [...prevManifests, ...manifests]);
 			}
 		);
-		const unsubscribeRemoveEvent = system.executedProgramManager.subscribe(
+		const unsubscribeRemoveEvent = system.programInstanceManager.subscribe(
 			'remove',
 			(manifests) => {
 				setManifests((prevManifests) => [
@@ -27,7 +27,7 @@ export function useProgramToRenderList() {
 			}
 		);
 		return () => {
-			system.executedProgramManager.removeAll();
+			system.programInstanceManager.removeAll();
 			unsubscribeAddEvent?.();
 			unsubscribeRemoveEvent?.();
 		};

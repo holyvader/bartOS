@@ -14,8 +14,8 @@ interface ProgramManifestOptions<SERVICES extends InjectableServiceImpl[]> {
 	userExecutable?: boolean;
 }
 
-export interface RenderedProgramManifest<
-	SERVICES extends InjectableServiceImpl[]
+export interface ProgramInstanceManifest<
+	SERVICES extends InjectableServiceImpl[] = InjectableServiceImpl[]
 > extends ProgramManifest<SERVICES> {
 	pid: string;
 }

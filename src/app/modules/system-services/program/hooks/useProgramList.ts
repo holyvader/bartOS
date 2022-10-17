@@ -3,21 +3,20 @@ import { ProgramService } from '@system-services/program/services/program.servic
 import { useState } from 'react';
 import { ProgramManifest } from '@system/definitions/program-manifest.definition';
 
-export function useToolbarAppRegistry(programService?: ProgramService): ProgramManifest[] {
-	const [manifests, setManifests] = useState<ProgramManifest[]>(Array.from(programService?.getAll() ?? []).filter( it => it.userExecutable));
+export function useProgramList(programService?: ProgramService): ProgramManifest[] {
+	const [manifests, setManifests] = useState<ProgramManifest[]>(Array.from(programService?.getAll() ?? []).filter(onlyUserExecutable));
 
-	console.info(Array.from(programService?.getAll() ?? []));
 	useMount(() => {
 		const unsubscribeFromEvent = programService?.subscribe(
 			'from',
 			(manifests) => {
-				setManifests((prevManifests) => [...prevManifests, ...manifests.filter( it => it.userExecutable)]);
+				setManifests((prevManifests) => [...prevManifests, ...manifests.filter(onlyUserExecutable)]);
 			}
 		);
 		const unsubscribeAddEvent = programService?.subscribe(
 			'add',
 			(manifests) => {
-				setManifests((prevManifests) => [...prevManifests, ...manifests.filter( it => it.userExecutable)]);
+				setManifests((prevManifests) => [...prevManifests, ...manifests.filter(onlyUserExecutable)]);
 			}
 		);
 		const unsubscribeRemoveEvent = programService?.subscribe(
@@ -39,5 +38,8 @@ export function useToolbarAppRegistry(programService?: ProgramService): ProgramM
 	});
 
 	return manifests;
+}
 
+function onlyUserExecutable(manifest: ProgramManifest): boolean {
+	return !!manifest.userExecutable;
 }

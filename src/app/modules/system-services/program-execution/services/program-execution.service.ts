@@ -1,7 +1,7 @@
 import { InjectableServiceImpl } from '@system/definitions/injectable-service.definition';
 import { system } from '@system/system';
 import { InjectableServiceName } from '@system/definitions/injectable-service-manifest.definition';
-import { ExecutedProgramRegistry } from '@system/registry/executed-program.registry';
+import { ProgramInstanceRegistry } from '@system/registry/program-instance.registry';
 import { ProgramManifest } from '@system/definitions/program-manifest.definition';
 
 export class ProgramExecutionService implements InjectableServiceImpl {
@@ -15,18 +15,22 @@ export class ProgramExecutionService implements InjectableServiceImpl {
 		const programsToStart = Array.from(system.programManager.getAll()).filter(
 			(it) => it.runOnStartup
 		);
-		system.executedProgramManager.add(programsToStart);
+		system.programInstanceManager.add(programsToStart);
 	}
 
-	subscribe: ExecutedProgramRegistry['subscribe'] = (type, observer) => {
-		return system.executedProgramManager.subscribe(type, observer);
+	subscribe: ProgramInstanceRegistry['subscribe'] = (type, observer) => {
+		return system.programInstanceManager.subscribe(type, observer);
 	};
 
-	executeProgram(id: string) {
+	getAll() {
+		return system.programInstanceManager.getAll();
+	}
+
+	execute(id: string) {
 		const program = this.findManifestById(id);
 		console.info(`program to run: ${id}`, program);
 		if (program) {
-			system.executedProgramManager.add([program]);
+			system.programInstanceManager.add([program]);
 		}
 	}
 }

@@ -1,8 +1,8 @@
-import { ExecutedProgramRegistry } from '@system/registry/executed-program.registry';
+import { ProgramInstanceRegistry } from '@system/registry/program-instance.registry';
 import { ProgramManifest } from '@system/definitions/program-manifest.definition';
 
-export class ExecutedProgramManagerService {
-	constructor(private programsToRender: ExecutedProgramRegistry) {
+export class ProgramInstanceManagerService {
+	constructor(private programsToRender: ProgramInstanceRegistry) {
 	}
 
 	add(manifests: ProgramManifest[]) {
@@ -22,7 +22,7 @@ export class ExecutedProgramManagerService {
 		this.programsToRender.remove(Array.from(this.getAll()).map( it => it.pid));
 	}
 
-	subscribe: ExecutedProgramRegistry['subscribe'] = (type, observer) => {
+	subscribe: ProgramInstanceRegistry['subscribe'] = (type, observer) => {
 		return this.programsToRender.subscribe(type, observer);
 	};
 }
