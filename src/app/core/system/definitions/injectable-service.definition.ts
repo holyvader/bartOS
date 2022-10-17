@@ -5,7 +5,7 @@ export interface InjectableServiceDefinition {
 }
 
 export interface ServiceImpl {
-	run(): void;
+	init(): void;
 }
 
 export interface InjectableServiceImpl extends ServiceImpl {

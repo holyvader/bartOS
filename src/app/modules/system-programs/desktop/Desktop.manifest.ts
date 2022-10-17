@@ -7,7 +7,7 @@ import { InjectableServiceName } from '@system/definitions/injectable-service-ma
 import { ProgramExecutionService } from '@system-services/program-execution/services/program-execution.service';
 
 export default programManifestDefinition<[ProgramExecutionService]>({
-	id: 'Desktop',
+	id: 'desktop',
 	title: 'Desktop',
 	type: ProgramType.PURE,
 	definition: Desktop,

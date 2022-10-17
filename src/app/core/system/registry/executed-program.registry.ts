@@ -3,11 +3,12 @@ import {
 	RenderedProgramManifest
 } from '@system/definitions/program-manifest.definition';
 import { ObservableService } from '@system/data/observable/observable.service';
+import { InjectableServiceImpl } from '@system/definitions/injectable-service.definition';
 
 let uniqueId = 1;
 
-export class ProgramRendererRegistry {
-	private observable = new ObservableService<RenderedProgramManifest>('pid');
+export class ExecutedProgramRegistry {
+	private observable = new ObservableService<RenderedProgramManifest<InjectableServiceImpl[]>>('pid');
 
 	add(manifests: ProgramManifest[]) {
 		this.observable.add(manifests.map(toExecutedProgramManifest));
@@ -22,7 +23,7 @@ export class ProgramRendererRegistry {
 		return this.observable.get(pid);
 	}
 
-	subscribe: ObservableService<RenderedProgramManifest>['subscribe'] = (
+	subscribe: ObservableService<RenderedProgramManifest<InjectableServiceImpl[]>>['subscribe'] = (
 		type,
 		observer
 	) => {
@@ -32,7 +33,7 @@ export class ProgramRendererRegistry {
 
 function toExecutedProgramManifest(
 	manifest: ProgramManifest
-): RenderedProgramManifest {
+): RenderedProgramManifest<InjectableServiceImpl[]> {
 	return {
 		...manifest,
 		pid: `pid-${uniqueId++}`

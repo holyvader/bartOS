@@ -8,9 +8,13 @@ export const Desktop: ProgramDefinition<[ProgramExecutionService]> = ({
 	dependencies
 }) => {
 	const [programExecutionService] = dependencies ?? [];
-	console.info('dependencies', programExecutionService?.test());
+
+	const tempAdd = () => {
+		console.info('run program', 'desktop');
+		programExecutionService?.executeProgram('desktop')
+	}
 	return (
-		<Box style={style}>
+		<Box style={style} onClick={tempAdd}>
 			<Toolbar />
 		</Box>
 	);

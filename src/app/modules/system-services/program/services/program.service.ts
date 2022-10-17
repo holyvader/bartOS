@@ -4,7 +4,7 @@ import { InjectableServiceName } from '@system/definitions/injectable-service-ma
 
 export class ProgramService implements InjectableServiceImpl {
 	constructor(public name: InjectableServiceName) {}
-	run() {
+	init() {
 		console.info(
 			`[programService] running. Registered Programs: ${Array.from(
 				system.programs.getAll()

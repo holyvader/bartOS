@@ -1,14 +1,20 @@
 import { system } from '@system/system';
 import { systemServiceManifests } from '@system-services/index';
 import { systemProgramManifests } from '@system-programs/index';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { ProgramManifest } from '@system/definitions/program-manifest.definition';
 
 export function useAppBoot() {
+	const initialized = useRef(false);
 	useEffect(() => {
-		console.info('booting');
-		system.services.register(systemServiceManifests);
-		system.programs.register(systemProgramManifests);
-		system.resources.register([]);
-		system.boot();
+		if (!initialized.current) {
+			console.info('booting');
+			system.boot({
+				systemServices: systemServiceManifests,
+				systemPrograms: systemProgramManifests as ProgramManifest[],
+				resources: []
+			});
+			initialized.current = true;
+		}
 	}, []);
 }

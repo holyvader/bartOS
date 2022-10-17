@@ -1,6 +1,7 @@
 import React, { CSSProperties, FC } from 'react';
 import { useProgramToRenderList } from '@system/renderer/useProgramToRenderList';
 import { system } from '@system/system';
+import { filterNotEmpty } from '@system/data-manipulation/collection/filter-not-empty';
 
 export const ProgramRenderer: FC = () => {
 	const programs = useProgramToRenderList();
@@ -9,9 +10,7 @@ export const ProgramRenderer: FC = () => {
 		<div style={styles}>
 			{programs.map((it) => (
 				<it.definition
-					dependencies={it.dependencies?.map((name) =>
-						system.getInjectableService(name)
-					)}
+					dependencies={filterNotEmpty(it.dependencies?.map( it => system.serviceManager.getInstance(it)))}
 					key={it.pid}
 				/>
 			))}

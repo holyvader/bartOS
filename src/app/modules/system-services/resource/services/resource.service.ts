@@ -4,8 +4,8 @@ import { InjectableServiceName } from '@system/definitions/injectable-service-ma
 
 export class ResourceService implements InjectableServiceImpl {
 	constructor(public name: InjectableServiceName) {}
-	run() {
-		new FileSystemService().run();
-		console.info('[resourceService] running');
+	init() {
+		new FileSystemService().init();
+		console.info('[resourceService] running. File system initialized');
 	}
 }

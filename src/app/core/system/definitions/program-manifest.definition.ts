@@ -19,7 +19,7 @@ export interface RenderedProgramManifest<
 	pid: string;
 }
 
-export type ProgramManifest<SERVICES extends InjectableServiceImpl[]> =
+export type ProgramManifest<SERVICES extends InjectableServiceImpl[] = InjectableServiceImpl[]> =
 	ProgramManifestOptions<SERVICES>;
 
 export function programManifestDefinition<
