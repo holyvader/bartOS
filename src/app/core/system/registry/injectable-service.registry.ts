@@ -9,7 +9,7 @@ export class InjectableServiceRegistry {
 	private observable = new ObservableService<InjectableServiceManifest>('id');
 
 	register(manifests: InjectableServiceManifest[]) {
-		this.observable.from(manifests);
+		this.observable.add(manifests);
 		return this;
 	}
 

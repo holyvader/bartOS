@@ -2,28 +2,27 @@ import { InjectableServiceRegistry } from '@system/registry/injectable-service.r
 import { ProgramRegistry } from '@system/registry/program.registry';
 import { ResourceRegistry } from '@system/registry/resource.registry';
 import { ProgramInstanceRegistry } from '@system/registry/program-instance.registry';
-import { ServiceManagerService } from '@system/services/service-manager/service-manager.service';
-import {
-	ProgramInstanceManagerService
-} from '@system/services/program-instance-manager/program-instance-manager.service';
+import { InjectableServiceProviderService } from '@system/services/injectable-service-provider/injectable-service-provider.service';
+import { ProgramInstanceManagerService } from '@system/services/program-instance-manager/program-instance-manager.service';
 import { InjectableServiceManifest } from '@system/definitions/injectable-service-manifest.definition';
 import { ProgramManifest } from '@system/definitions/program-manifest.definition';
 import { ResourceDefinition } from '@system/definitions/resource.definition';
 import { ProgramManagerService } from '@system/services/program-manager/program-manager.service';
 import { ResourceManagerService } from '@system/services/resource-manager/resource-manager.service';
-
+import { SystemServiceProviderService } from '@system/services/system-service-provider/system-service-provider.service';
 
 interface BootOptions {
 	systemServices: InjectableServiceManifest[];
 	systemPrograms: ProgramManifest[];
-	resources: ResourceDefinition[]
+	resources: ResourceDefinition[];
 }
 
 export class System {
-	public serviceManager: ServiceManagerService;
-	public programInstanceManager: ProgramInstanceManagerService;
-	public programManager: ProgramManagerService;
-	public resourceManager: ResourceManagerService;
+	public injectableServiceManager: InjectableServiceProviderService;
+	public systemServiceManager: SystemServiceProviderService;
+	protected programInstanceManager: ProgramInstanceManagerService;
+	protected programManager: ProgramManagerService;
+	protected resourceManager: ResourceManagerService;
 
 	constructor(
 		protected services: InjectableServiceRegistry,
@@ -31,10 +30,19 @@ export class System {
 		protected programRendererRegistry: ProgramInstanceRegistry,
 		protected resources: ResourceRegistry
 	) {
-		this.serviceManager = new ServiceManagerService(services);
-		this.programInstanceManager = new ProgramInstanceManagerService(programRendererRegistry);
+		this.injectableServiceManager = new InjectableServiceProviderService(
+			services
+		);
+		this.programInstanceManager = new ProgramInstanceManagerService(
+			programRendererRegistry
+		);
 		this.programManager = new ProgramManagerService(programs);
 		this.resourceManager = new ResourceManagerService(resources);
+		this.systemServiceManager = new SystemServiceProviderService(
+			this.programInstanceManager,
+			this.programManager,
+			this.resourceManager
+		);
 	}
 
 	boot(options: BootOptions) {

@@ -5,7 +5,7 @@ export class ProgramRegistry {
 	private observable = new ObservableService<ProgramManifest>('id');
 
 	register(manifests: ProgramManifest[]) {
-		this.observable.from(manifests);
+		this.observable.add(manifests);
 		return this;
 	}
 

@@ -7,12 +7,6 @@ export function useProgramList(programService?: ProgramService): ProgramManifest
 	const [manifests, setManifests] = useState<ProgramManifest[]>(Array.from(programService?.getAll() ?? []).filter(onlyUserExecutable));
 
 	useMount(() => {
-		const unsubscribeFromEvent = programService?.subscribe(
-			'from',
-			(manifests) => {
-				setManifests((prevManifests) => [...prevManifests, ...manifests.filter(onlyUserExecutable)]);
-			}
-		);
 		const unsubscribeAddEvent = programService?.subscribe(
 			'add',
 			(manifests) => {
@@ -31,7 +25,6 @@ export function useProgramList(programService?: ProgramService): ProgramManifest
 		);
 
 		return () => {
-			unsubscribeFromEvent?.();
 			unsubscribeAddEvent?.();
 			unsubscribeRemoveEvent?.();
 		}

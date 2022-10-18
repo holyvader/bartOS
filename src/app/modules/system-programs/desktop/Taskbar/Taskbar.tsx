@@ -1,4 +1,7 @@
-import { ProgramDefinition, WithServices } from '@system/definitions/program.definition';
+import {
+	ProgramDefinition,
+	WithServices
+} from '@system/definitions/program.definition';
 import { CSSProperties, FC } from 'react';
 import { Box } from '@chakra-ui/react';
 import { ProgramExecutionService } from '@system-services/program-execution/services/program-execution.service';
@@ -10,14 +13,25 @@ interface TaskbarProps {
 	programInstances: { id: string }[];
 }
 
-export const Taskbar: FC<TaskbarProps & WithServices<[ProgramExecutionService, ProgramService]>> = ({ dependencies, programInstances }) => {
+export const Taskbar: FC<
+	TaskbarProps & WithServices<[ProgramExecutionService, ProgramService]>
+> = ({ dependencies, programInstances }) => {
 	const [programExecutionService, programService] = dependencies ?? [];
 	const manifests = useProgramList(programService);
 	return (
 		<Box bg="gray.200" style={style} padding="2">
-			Toolbar!
-			{manifests.map( it => (
-				<TaskbarItem key={it.id} id={it.id} title={it.title} onClick={(id) => programExecutionService?.execute(id)} instanceNo={programInstances.filter( instance => instance.id === it.id).length} />))}
+			{manifests.map((it) => (
+				<TaskbarItem
+					key={it.id}
+					id={it.id}
+					title={it.title}
+					style={{ marginRight: 8 }}
+					onClick={(id) => programExecutionService?.execute(id)}
+					instanceNo={
+						programInstances.filter((instance) => instance.id === it.id).length
+					}
+				/>
+			))}
 		</Box>
 	);
 };

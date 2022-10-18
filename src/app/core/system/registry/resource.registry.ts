@@ -5,7 +5,7 @@ export class ResourceRegistry {
 	private observable = new ObservableService<ResourceDefinition>('id');
 
 	register(manifests: ResourceDefinition[]) {
-		this.observable.from(manifests);
+		this.observable.add(manifests);
 		return this;
 	}
 

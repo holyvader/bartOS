@@ -22,17 +22,24 @@ interface WindowProps {
 	isOpen: boolean;
 	overlay?: boolean;
 	position: WindowPosition;
+	pid: string;
 	onClose(): void;
 }
 
 export const Window: React.FC<WindowProps> = ({
 	children,
 	isOpen,
-	overlay,
-	onClose
+	overlay = false,
+	onClose,
+	pid
 }) => {
 	return (
-		<Modal isOpen={isOpen} onClose={onClose}>
+		<Modal
+			isOpen={isOpen}
+			onClose={onClose}
+			closeOnOverlayClick={false}
+			trapFocus={false}
+			id={pid}>
 			{overlay && <ModalOverlay />}
 			<ModalContent>
 				<ModalHeader>Modal Title</ModalHeader>

@@ -1,18 +1,16 @@
 import { ProgramRegistry } from '@system/registry/program.registry';
 
 export class ProgramManagerService {
-	constructor(private programsToRender: ProgramRegistry) {
-	}
+	constructor(private programRegistry: ProgramRegistry) {}
 
 	subscribe: ProgramRegistry['subscribe'] = (type, observer) => {
-		return this.programsToRender.subscribe(type, observer);
+		return this.programRegistry.subscribe(type, observer);
 	};
 
 	getAll() {
-		return this.programsToRender.getAll();
+		return this.programRegistry.getAll();
 	}
 	get(id: string) {
-		return this.programsToRender.get(id);
+		return this.programRegistry.get(id);
 	}
-
 }

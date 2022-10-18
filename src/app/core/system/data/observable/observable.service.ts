@@ -13,19 +13,13 @@ export class ObservableService<T extends object> {
 		private store = new StoreService<T>(keyName)
 	) {}
 
-	from(data: T[]) {
-		this.store.setMany(data);
-		this.triggerEvent('from', data);
-		return this;
-	}
-
-	addMany(data: T[]) {
+	add(data: T[]) {
 		this.store.setMany(data);
 		this.triggerEvent('add', data);
 		return this;
 	}
 
-	removeMany(ids: string[]) {
+	remove(ids: string[]) {
 		const elements = this.getManyById(ids);
 		this.store.removeMany(ids);
 		this.triggerEvent('remove', elements);

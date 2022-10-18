@@ -1,8 +1,3 @@
-export interface EventFrom<T> {
-	type: 'from';
-	data: T[];
-}
-
 export interface EventAdd<T> {
 	type: 'add';
 	data: T[];
@@ -26,7 +21,7 @@ export type EventByType<
 		: never
 	: never;
 
-export type ObservableEvent<T> = EventFrom<T> | EventAdd<T> | EventRemove<T>;
+export type ObservableEvent<T> = EventAdd<T> | EventRemove<T>;
 export type ObservableEventData<T, TYPE extends EventType> = EventByType<
 	ObservableEvent<T>,
 	TYPE

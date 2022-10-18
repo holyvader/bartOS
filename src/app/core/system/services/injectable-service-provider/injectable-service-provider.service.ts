@@ -2,15 +2,14 @@ import { InjectableServiceImpl } from '@system/definitions/injectable-service.de
 import { InjectableServiceName } from '@system/definitions/injectable-service-manifest.definition';
 import { InjectableServiceRegistry } from '@system/registry/injectable-service.registry';
 
-export class ServiceManagerService {
-	constructor(private services: InjectableServiceRegistry) {
-	}
+export class InjectableServiceProviderService {
+	constructor(private services: InjectableServiceRegistry) {}
 
 	getInstance(name: InjectableServiceName): InjectableServiceImpl | undefined {
 		const service = this.services.get(name);
-		if (service) {
-			return new service.definition(service.id);
+		if (!service) {
+			return undefined;
 		}
-		return undefined;
+		return new service.definition(service.id);
 	}
 }

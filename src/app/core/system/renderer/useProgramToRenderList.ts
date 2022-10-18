@@ -1,33 +1,30 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { ProgramInstanceManifest } from '@system/definitions/program-manifest.definition';
 import { system } from '@system/system';
-import { InjectableServiceImpl } from '@system/definitions/injectable-service.definition';
 import { useMount } from '@ui/utils/lifecycle/useMount';
+import { SystemServiceName } from '@system/definitions/system-service.definition';
 
 export function useProgramToRenderList() {
-	const [manifests, setManifests] = useState<ProgramInstanceManifest<InjectableServiceImpl[]>[]>(
-		[]
-	);
+	const [manifests, setManifests] = useState<ProgramInstanceManifest[]>([]);
 
 	useMount(() => {
-		const unsubscribeAddEvent = system.programInstanceManager.subscribe(
-			'add',
-			(manifests) => {
-				setManifests((prevManifests) => [...prevManifests, ...manifests]);
-			}
+		const service = system.systemServiceManager.getService(
+			SystemServiceName.PROGRAM_INSTANCE_MANAGER
 		);
-		const unsubscribeRemoveEvent = system.programInstanceManager.subscribe(
-			'remove',
-			(manifests) => {
-				setManifests((prevManifests) => [
-					...prevManifests.filter(
-						(it) => !manifests.map((it) => it.pid).includes(it.pid)
-					)
-				]);
-			}
-		);
+
+		const unsubscribeAddEvent = service?.subscribe('add', (manifests) => {
+			setManifests((prevManifests) => [...prevManifests, ...manifests]);
+		});
+
+		const unsubscribeRemoveEvent = service?.subscribe('remove', (manifests) => {
+			setManifests((prevManifests) => [
+				...prevManifests.filter(
+					(it) => !manifests.map((it) => it.pid).includes(it.pid)
+				)
+			]);
+		});
 		return () => {
-			system.programInstanceManager.removeAll();
+			service?.removeAll();
 			unsubscribeAddEvent?.();
 			unsubscribeRemoveEvent?.();
 		};

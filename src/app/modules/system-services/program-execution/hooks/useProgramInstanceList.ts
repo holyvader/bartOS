@@ -7,12 +7,6 @@ export function useProgramInstanceList(programExecutionService?: ProgramExecutio
 	const [manifests, setManifests] = useState<ProgramInstanceManifest[]>(Array.from(programExecutionService?.getAll() ?? []));
 
 	useMount(() => {
-		const unsubscribeFromEvent = programExecutionService?.subscribe(
-			'from',
-			(manifests) => {
-				setManifests((prevManifests) => [...prevManifests, ...manifests.filter(onlyUserExecutable)]);
-			}
-		);
 		const unsubscribeAddEvent = programExecutionService?.subscribe(
 			'add',
 			(manifests) => {
@@ -31,7 +25,6 @@ export function useProgramInstanceList(programExecutionService?: ProgramExecutio
 		);
 
 		return () => {
-			unsubscribeFromEvent?.();
 			unsubscribeAddEvent?.();
 			unsubscribeRemoveEvent?.();
 		}
