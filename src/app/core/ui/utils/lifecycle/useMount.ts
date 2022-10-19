@@ -6,5 +6,5 @@ export function useMount(fn: () => (() => void) | void) {
 		return () => {
 			unsubscribe?.();
 		};
-	}, [])
+	}, []);
 }

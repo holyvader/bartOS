@@ -1,26 +1,10 @@
 import React from 'react';
-import {
-	Button,
-	Modal,
-	ModalBody,
-	ModalCloseButton,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	ModalOverlay
-} from '@chakra-ui/react';
-
-interface WindowPosition {
-	x: number;
-	y: number;
-	width: number;
-	height: number;
-}
+import { Dialog, Title } from '@mantine/core';
+import { WindowPosition } from './definition/window.definition';
 
 interface WindowProps {
 	children: any;
 	isOpen: boolean;
-	overlay?: boolean;
 	position: WindowPosition;
 	pid: string;
 	onClose(): void;
@@ -29,30 +13,23 @@ interface WindowProps {
 export const Window: React.FC<WindowProps> = ({
 	children,
 	isOpen,
-	overlay = false,
+	position,
 	onClose,
 	pid
 }) => {
 	return (
-		<Modal
-			isOpen={isOpen}
+		<Dialog
+			opened={isOpen}
 			onClose={onClose}
-			closeOnOverlayClick={false}
-			trapFocus={false}
-			id={pid}>
-			{overlay && <ModalOverlay />}
-			<ModalContent>
-				<ModalHeader>Modal Title</ModalHeader>
-				<ModalCloseButton />
-				<ModalBody>{children}</ModalBody>
-
-				<ModalFooter>
-					<Button colorScheme="blue" mr={3} onClick={onClose}>
-						Close
-					</Button>
-					<Button variant="ghost">Secondary Action</Button>
-				</ModalFooter>
-			</ModalContent>
-		</Modal>
+			position={position}
+			shadow="xl"
+			p={30}
+			radius="sm"
+			withCloseButton>
+			<div id={pid} style={{ width: position.width, height: position.height }}>
+				<Title order={1}>This is h1 title</Title>
+				{children}
+			</div>
+		</Dialog>
 	);
 };

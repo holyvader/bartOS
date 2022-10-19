@@ -1,6 +1,6 @@
 import { system } from '@system/system';
-import { systemServiceManifests } from '@system-services/index';
-import { systemProgramManifests } from '@system-programs/index';
+import { systemServiceManifests } from './modules/services/index';
+import { systemProgramManifests } from '@programs/index';
 import { ProgramManifest } from '@system/definitions/program-manifest.definition';
 import { useMount } from '@ui/utils/lifecycle/useMount';
 

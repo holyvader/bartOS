@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { AllProviders } from '@providers/AllProviders';
+import { AllProviders } from './app/modules/config/AllProviders';
 import { App } from './app/App';
 
 const root = document.getElementById('root');

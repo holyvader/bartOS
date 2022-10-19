@@ -7,13 +7,15 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "ts-check": "vue-tsc --noEmit",
-    "gen:theme-typings": "chakra-cli tokens src/app/modules/providers/theme/theme.ts"
+    "ts-check": "vue-tsc --noEmit"
   },
   "dependencies": {
-    "@chakra-ui/react": "~2.3.5",
     "@emotion/react": "~11.10.4",
     "@emotion/styled": "~11.10.4",
+    "@mantine/core": "^5.5.5",
+    "@mantine/hooks": "^5.5.5",
+    "@mantine/modals": "^5.5.5",
+    "@mantine/spotlight": "^5.5.5",
     "framer-motion": "~7.5.1",
     "react": "~18.2.0",
     "react-dom": "~18.2.0",

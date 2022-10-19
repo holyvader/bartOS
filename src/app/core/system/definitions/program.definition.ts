@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { InjectableServiceImpl } from '@system/definitions/injectable-service.definition';
+import { ModuleServiceImpl } from '@system/definitions/module-service.definition';
 
 export interface ProgramDefinitionProps {
 	onClose?(): void;
@@ -10,8 +10,11 @@ export enum ProgramType {
 	PURE
 }
 
-export interface WithServices<SERVICES extends InjectableServiceImpl[] = []> {
+export interface WithServices<SERVICES extends ModuleServiceImpl[] = []> {
 	dependencies?: SERVICES;
 }
 
-export type ProgramDefinition<SERVICES extends InjectableServiceImpl[] = [], PROPS = Record<string, unknown>> = FC<PROPS & WithServices<SERVICES>>;
+export type ProgramDefinition<
+	SERVICES extends ModuleServiceImpl[] = [],
+	PROPS = Record<string, unknown>
+> = FC<PROPS & WithServices<SERVICES>>;

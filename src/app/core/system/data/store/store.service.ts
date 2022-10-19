@@ -23,6 +23,10 @@ export class StoreService<T extends object> {
 		});
 	}
 
+	removeAll() {
+		this.store.clear();
+	}
+
 	getAll(): IterableIterator<T> {
 		return this.store.values();
 	}

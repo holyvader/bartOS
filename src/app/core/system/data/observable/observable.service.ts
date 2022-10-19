@@ -2,10 +2,14 @@ import { StoreService } from '@system/data/store/store.service';
 import * as ObservableTypes from '@system/data/observable/obervable.types';
 import { filterNotEmpty } from '@system/data-manipulation/collection/filter-not-empty';
 
-export class ObservableService<T extends object> {
+export class ObservableService<
+	T extends object,
+	EVENT extends ObservableTypes.ObservableEventBase = ObservableTypes.ObservableEventBase,
+	TYPE extends EVENT['type'] = EVENT['type']
+> {
 	private subscribers = new Map<
-		ObservableTypes.Observer<T, ObservableTypes.EventType>,
-		ObservableTypes.EventType
+		ObservableTypes.Observer<T, EVENT, TYPE>,
+		TYPE
 	>();
 
 	constructor(
@@ -15,19 +19,26 @@ export class ObservableService<T extends object> {
 
 	add(data: T[]) {
 		this.store.setMany(data);
-		this.triggerEvent('add', data);
+		this.triggerEvent({ type: 'add', data });
 		return this;
 	}
 
 	remove(ids: string[]) {
-		const elements = this.getManyById(ids);
+		const data = this.getManyById(ids);
 		this.store.removeMany(ids);
-		this.triggerEvent('remove', elements);
+		this.triggerEvent({ type: 'remove', data });
 		return this;
 	}
 
-	getAll(): IterableIterator<T> {
-		return this.store.getAll();
+	removeAll() {
+		const data = this.getAll();
+		this.store.removeAll();
+		this.triggerEvent({ type: 'remove', data });
+		return this;
+	}
+
+	getAll(): T[] {
+		return Array.from(this.store.getAll());
 	}
 
 	get(id: string): T | undefined {
@@ -35,28 +46,30 @@ export class ObservableService<T extends object> {
 	}
 
 	getManyById(ids: string[]): T[] {
-		return filterNotEmpty(ids.map( it => this.store.getByKey(it)));
+		return filterNotEmpty(ids.map((it) => this.store.getByKey(it)));
 	}
 
-	triggerEvent<TYPE extends ObservableTypes.EventType>(
-		type: TYPE,
-		data: ObservableTypes.ObservableEventData<T, TYPE>
-	) {
+	triggerEvent(event: EVENT | ObservableTypes.ObservableBuiltInEvent<T>) {
 		for (const [fn, observerType] of this.subscribers.entries()) {
-			if (observerType === type) {
-				fn(data);
+			if (observerType === event.type) {
+				fn((event as { data: any })?.data);
 			}
 		}
 	}
 
-	subscribe<TYPE extends ObservableTypes.EventType>(
+	subscribe<
+		TYPE extends
+			| EVENT['type']
+			| ObservableTypes.ObservableBuiltInEvent<T>['type']
+	>(
 		type: TYPE,
-		observer: ObservableTypes.Observer<T, TYPE>
+		observer: ObservableTypes.Observer<T, EVENT, TYPE>
 	): ObservableTypes.UnsubscribeFn {
-		this.subscribers.set(observer, type);
-
+		this.subscribers.set(observer as any, type as any);
 		return () => {
-			this.subscribers.delete(observer);
+			this.subscribers.delete(observer as any);
 		};
 	}
 }
+
+type Z = ObservableTypes.Observer<{ a: string }, never, 'add'>;

@@ -2,27 +2,30 @@ import { ProgramInstanceRegistry } from '@system/registry/program-instance.regis
 import { ProgramManifest } from '@system/definitions/program-manifest.definition';
 
 export class ProgramInstanceManagerService {
-	constructor(private programsToRender: ProgramInstanceRegistry) {
-	}
+	constructor(private programInstanceRegistry: ProgramInstanceRegistry) {}
 
 	add(manifests: ProgramManifest[]) {
-		this.programsToRender.add(manifests);
+		this.programInstanceRegistry.add(manifests);
 		return this;
 	}
 
 	getAll() {
-		return this.programsToRender.getAll();
+		return this.programInstanceRegistry.getAll();
 	}
 
 	get(pid: string) {
-		return this.programsToRender.get(pid);
+		return this.programInstanceRegistry.get(pid);
 	}
 
-	removeAll() {
-		this.programsToRender.remove(Array.from(this.getAll()).map( it => it.pid));
+	remove(pid: string) {
+		this.programInstanceRegistry.remove(
+			this.getAll()
+				.filter((it) => it.pid === pid)
+				.map((it) => it.pid)
+		);
 	}
 
 	subscribe: ProgramInstanceRegistry['subscribe'] = (type, observer) => {
-		return this.programsToRender.subscribe(type, observer);
+		return this.programInstanceRegistry.subscribe(type, observer);
 	};
 }

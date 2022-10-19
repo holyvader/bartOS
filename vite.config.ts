@@ -21,9 +21,9 @@ export default defineConfig({
 			// USER HOME
 			'@user-home': alias('./src/app/user-home'),
 			// MODULES
-			'@system-programs': moduleAlias('/system-programs'),
-			'@system-services': moduleAlias('/system-services'),
-			'@providers': moduleAlias('/providers'),
+			'@programs': moduleAlias('/programs'),
+			'@services': moduleAlias('/services'),
+			'@config': moduleAlias('/config'),
 			// CORE
 			'@permission': coreAlias('/permission'),
 			'@system': coreAlias('/system'),

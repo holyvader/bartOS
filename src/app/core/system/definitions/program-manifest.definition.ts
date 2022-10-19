@@ -1,30 +1,31 @@
 import { ProgramDefinition, ProgramType } from './program.definition';
-import { InjectableServiceImpl } from '@system/definitions/injectable-service.definition';
-import { InjectableServiceName } from '@system/definitions/injectable-service-manifest.definition';
+import { ModuleServiceImpl } from '@system/definitions/module-service.definition';
+import { ModuleServiceName } from '@system/definitions/module-service-manifest.definition';
 
 export { ProgramType };
 
-interface ProgramManifestOptions<SERVICES extends InjectableServiceImpl[]> {
+interface ProgramManifestOptions<SERVICES extends ModuleServiceImpl[]> {
 	id: string;
 	title: string;
 	type: ProgramType;
 	definition: ProgramDefinition<SERVICES>;
-	dependencies?: InjectableServiceName[];
+	dependencies?: ModuleServiceImpl['name'][];
 	runOnStartup?: boolean;
 	userExecutable?: boolean;
 }
 
 export interface ProgramInstanceManifest<
-	SERVICES extends InjectableServiceImpl[] = InjectableServiceImpl[]
+	SERVICES extends ModuleServiceImpl[] = ModuleServiceImpl[]
 > extends ProgramManifest<SERVICES> {
 	pid: string;
 }
 
-export type ProgramManifest<SERVICES extends InjectableServiceImpl[] = InjectableServiceImpl[]> =
-	ProgramManifestOptions<SERVICES>;
+export type ProgramManifest<
+	SERVICES extends ModuleServiceImpl[] = ModuleServiceImpl[]
+> = ProgramManifestOptions<SERVICES>;
 
-export function programManifestDefinition<
-	SERVICES extends InjectableServiceImpl[]
->(options: ProgramManifestOptions<SERVICES>): ProgramManifest<SERVICES> {
+export function programManifestDefinition<SERVICES extends ModuleServiceImpl[]>(
+	options: ProgramManifestOptions<SERVICES>
+): ProgramManifest<SERVICES> {
 	return options;
 }

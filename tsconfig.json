@@ -19,10 +19,9 @@
 		"paths": {
 			"@public/*": ["public/*"],
 			"@user-home/*": ["src/app/user-home/*"],
-			"@system-programs/*": ["src/app/modules/system-programs/*"],
-			"@system-services/*": ["src/app/modules/system-services/*"],
-			"@providers/*": ["src/app/modules/providers/*"],
-
+			"@programs/*": ["src/app/modules/programs/*"],
+			"@services/*": ["src/app/modules/services/*"],
+			"@config/*": ["src/app/modules/config/*"],
 			"@permission/*": ["src/app/core/permission/*"],
 			"@system/*": ["src/app/core/system/*"],
 			"@ui/*": ["src/app/core/ui/*"],

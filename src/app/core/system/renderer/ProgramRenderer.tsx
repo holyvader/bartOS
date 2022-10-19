@@ -1,25 +1,24 @@
 import React, { CSSProperties, FC } from 'react';
-import { useProgramToRenderList } from '@system/renderer/useProgramToRenderList';
+import { useProgramInstanceList } from '@system/renderer/useProgramInstanceList';
 import { system } from '@system/system';
 import { filterNotEmpty } from '@system/data-manipulation/collection/filter-not-empty';
-import { useProgramWrapper } from '@system/renderer/useProgramWrapper';
+import { getProgramWrapper } from '@system/renderer/getProgramWrapper';
 
 export const ProgramRenderer: FC = () => {
-	const programs = useProgramToRenderList();
-	const getWrapper = useProgramWrapper();
+	const programs = useProgramInstanceList();
 	return (
 		<div style={styles}>
 			{programs.map((it) => {
-				const Wrapper = getWrapper(it.type)(it.definition);
+				const Wrapper = getProgramWrapper(it.type);
+				const dependencies = filterNotEmpty(
+					it.dependencies?.map((it) =>
+						system.moduleServiceManager.getInstance(it)
+					)
+				);
 				return (
-					<Wrapper
-						dependencies={filterNotEmpty(
-							it.dependencies?.map((it) =>
-								system.injectableServiceManager.getInstance(it)
-							)
-						)}
-						key={it.pid}
-					/>
+					<Wrapper manifest={it} key={it.pid}>
+						<it.definition dependencies={dependencies} />
+					</Wrapper>
 				);
 			})}
 		</div>

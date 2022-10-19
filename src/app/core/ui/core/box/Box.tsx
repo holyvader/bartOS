@@ -1,6 +1,6 @@
 import React from 'react';
-import { Box as ChakraBox } from '@chakra-ui/react';
+import { Box as _Box, BoxProps } from '@mantine/core';
 
-export const Box: React.FC<ExtractParams<typeof ChakraBox>> = (props) => {
-	return (<ChakraBox {...props} />);
+export const Box: React.FC<BoxProps> = (props) => {
+	return <_Box {...props} />;
 };
