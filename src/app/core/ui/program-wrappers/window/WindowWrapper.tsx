@@ -6,6 +6,7 @@ import { windowManagerService } from '@ui/program-wrappers/window/services/windo
 import { system } from '@system/system';
 import { SystemServiceName } from '@system/definitions/system-service.definition';
 import { Button } from '@ui/core/buttons/Button';
+import { WindowPosition } from '@ui/program-wrappers/window/definition/window.definition';
 
 interface WindowWrapperProps {
 	children: any;
@@ -16,15 +17,13 @@ export const WindowWrapper: React.FC<WindowWrapperProps> = ({
 	children,
 	manifest
 }) => {
-	const [position, setPosition] = useState(
-		windowManagerService.getInitialPosition()
-	);
+	const [position, setPosition] = useState<WindowPosition | undefined>();
 	const programInstanceManager = system.systemServiceManager.getService(
 		SystemServiceName.PROGRAM_INSTANCE_MANAGER
 	);
 
 	useMount(() => {
-		const removeFromRegistry = windowManagerService.add(manifest);
+		const removeFromRegistry = windowManagerService.add(manifest, setPosition);
 		const unsubscribeOnPositionChange =
 			windowManagerService.subscribeToPositionChange(
 				manifest.pid,
@@ -37,28 +36,25 @@ export const WindowWrapper: React.FC<WindowWrapperProps> = ({
 			unsubscribeOnPositionChange();
 		};
 	});
-
+	if (!position) {
+		return null;
+	}
 	return (
 		<Window
 			onClose={() => {
 				windowManagerService.remove(manifest.pid);
 				programInstanceManager?.remove(manifest.pid);
 			}}
+			onPositionChange={(position) => {
+				windowManagerService.changePosition(manifest.pid, position);
+			}}
+			onFocus={() => {
+				windowManagerService.focus(manifest.pid);
+			}}
 			isOpen={true}
 			pid={manifest.pid}
 			position={position}>
 			{children}
-			<Button
-				onClick={() => {
-					windowManagerService.changePosition(manifest.pid, {
-						left: position.left + 20,
-						top: position.top,
-						width: position.width,
-						height: position.height
-					});
-				}}>
-				Change position
-			</Button>
 		</Window>
 	);
 };

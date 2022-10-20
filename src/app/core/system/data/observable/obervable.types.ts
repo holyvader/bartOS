@@ -12,6 +12,11 @@ export interface EventRemove<T> extends ObservableEventBase {
 	data: T[];
 }
 
+export interface EventReplace<T> extends ObservableEventBase {
+	type: 'replace';
+	data: T;
+}
+
 export type EventByType<
 	EVENT extends ObservableEventBase,
 	TYPE
@@ -24,7 +29,10 @@ export type EventByType<
 	: never;
 
 export type BuiltInEventType = ObservableBuiltInEvent<unknown>['type'];
-export type ObservableBuiltInEvent<T> = EventAdd<T> | EventRemove<T>;
+export type ObservableBuiltInEvent<T> =
+	| EventAdd<T>
+	| EventRemove<T>
+	| EventReplace<T>;
 
 export type AllObservableEvents<T, EVENT extends ObservableEventBase> =
 	| EVENT

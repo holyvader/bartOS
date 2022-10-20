@@ -34,4 +34,8 @@ export class StoreService<T extends object> {
 	getByKey(id: string): T | undefined {
 		return this.store.get(id);
 	}
+
+	replace(id: string, item: T) {
+		this.store.set(id, item);
+	}
 }

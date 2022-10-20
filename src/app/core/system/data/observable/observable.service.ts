@@ -49,6 +49,14 @@ export class ObservableService<
 		return filterNotEmpty(ids.map((it) => this.store.getByKey(it)));
 	}
 
+	replace(id: string, item: T) {
+		this.store.replace(id, item);
+		this.triggerEvent({
+			type: 'replace',
+			data: item
+		});
+	}
+
 	triggerEvent(event: EVENT | ObservableTypes.ObservableBuiltInEvent<T>) {
 		for (const [fn, observerType] of this.subscribers.entries()) {
 			if (observerType === event.type) {

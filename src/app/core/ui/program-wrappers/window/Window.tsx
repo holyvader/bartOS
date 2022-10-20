@@ -1,12 +1,16 @@
 import React from 'react';
-import { Dialog, Title } from '@mantine/core';
+import { CloseButton, Paper } from '@mantine/core';
 import { WindowPosition } from './definition/window.definition';
+import { Box } from '@ui/core/box/Box';
+import { Rnd } from 'react-rnd';
 
 interface WindowProps {
 	children: any;
 	isOpen: boolean;
 	position: WindowPosition;
 	pid: string;
+	onPositionChange(position: WindowPosition): void;
+	onFocus(): void;
 	onClose(): void;
 }
 
@@ -15,21 +19,59 @@ export const Window: React.FC<WindowProps> = ({
 	isOpen,
 	position,
 	onClose,
+	onPositionChange,
+	onFocus,
 	pid
 }) => {
 	return (
-		<Dialog
-			opened={isOpen}
-			onClose={onClose}
-			position={position}
-			shadow="xl"
-			p={30}
-			radius="sm"
-			withCloseButton>
-			<div id={pid} style={{ width: position.width, height: position.height }}>
-				<Title order={1}>This is h1 title</Title>
+		<Rnd
+			dragHandleClassName="title-bar"
+			className={`window-${pid}`}
+			style={{
+				zIndex: position.zIndex
+			}}
+			onResizeStop={(e, dir, elementRef, delta, resizePosition) => {
+				onPositionChange({
+					top: resizePosition.y,
+					left: resizePosition.x,
+					width: position.width + delta.width,
+					height: position.height + delta.height,
+					zIndex: position.zIndex
+				});
+			}}
+			onDragStop={(e, data) => {
+				onPositionChange({
+					top: data.y,
+					left: data.x,
+					width: position.width,
+					height: position.height,
+					zIndex: position.zIndex
+				});
+			}}
+			position={{
+				x: position.left,
+				y: position.top
+			}}
+			size={{
+				width: position.width,
+				height: position.height
+			}}>
+			<Paper
+				style={{
+					width: '100%',
+					height: '100%'
+				}}
+				shadow={'lg'}
+				withBorder
+				onMouseDown={onFocus}
+				radius={'sm'}>
+				<div style={{ cursor: 'move' }} className="title-bar">
+					<Box sx={({ colors }) => ({ backgroundColor: colors.primary[9] })}>
+						<CloseButton onClick={onClose} />
+					</Box>
+				</div>
 				{children}
-			</div>
-		</Dialog>
+			</Paper>
+		</Rnd>
 	);
 };

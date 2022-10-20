@@ -3,4 +3,5 @@ export interface WindowPosition {
 	left: number;
 	width: number;
 	height: number;
+	zIndex: number;
 }
