@@ -21,7 +21,7 @@
 			"@user-home/*": ["src/app/user-home/*"],
 			"@programs/*": ["src/app/modules/programs/*"],
 			"@services/*": ["src/app/modules/services/*"],
-			"@config/*": ["src/app/modules/config/*"],
+			"@config/*": ["src/app/config/*"],
 			"@permission/*": ["src/app/core/permission/*"],
 			"@system/*": ["src/app/core/system/*"],
 			"@ui/*": ["src/app/core/ui/*"],

@@ -60,24 +60,30 @@ export class ObservableService<
 	triggerEvent(event: EVENT | ObservableTypes.ObservableBuiltInEvent<T>) {
 		for (const [fn, observerType] of this.subscribers.entries()) {
 			if (observerType === event.type) {
-				fn((event as { data: any })?.data);
+				const data = (event as ObservableTypes.ObservableBuiltInEvent<T>)
+					?.data as ObservableTypes.ObservableEventData<T, EVENT, TYPE>;
+				fn(data);
 			}
 		}
 	}
 
 	subscribe<
-		TYPE extends
+		SUB_TYPE extends
 			| EVENT['type']
 			| ObservableTypes.ObservableBuiltInEvent<T>['type']
 	>(
-		type: TYPE,
-		observer: ObservableTypes.Observer<T, EVENT, TYPE>
+		type: SUB_TYPE,
+		observer: ObservableTypes.Observer<T, EVENT, SUB_TYPE>
 	): ObservableTypes.UnsubscribeFn {
-		this.subscribers.set(observer as any, type as any);
+		// todo resolve type mismatch later
+		this.subscribers.set(
+			observer as unknown as ObservableTypes.Observer<T, EVENT, TYPE>,
+			type as unknown as TYPE
+		);
 		return () => {
-			this.subscribers.delete(observer as any);
+			this.subscribers.delete(
+				observer as unknown as ObservableTypes.Observer<T, EVENT, TYPE>
+			);
 		};
 	}
 }
-
-type Z = ObservableTypes.Observer<{ a: string }, never, 'add'>;

@@ -34,10 +34,6 @@ export type ObservableBuiltInEvent<T> =
 	| EventRemove<T>
 	| EventReplace<T>;
 
-export type AllObservableEvents<T, EVENT extends ObservableEventBase> =
-	| EVENT
-	| ObservableBuiltInEvent<T>;
-
 export type ObservableEventData<
 	T,
 	EVENT extends ObservableEventBase = ObservableEventBase,
@@ -59,25 +55,3 @@ export type Observer<
 > = (data: ObservableEventData<T, EVENT, TYPE>) => void;
 
 export type UnsubscribeFn = () => void;
-
-type OOOO = Observer<{ a: string }, { type: 'aaa'; data: string }, 'aaa'>;
-type OOOO1 = Observer<{ a: string }, { type: 'aaa'; data: string }>;
-
-type ZZZ0 = ObservableEventData<{ a: string }, never, 'add'>;
-
-type ZZZ0111 = EventByType<
-	{ type: 'aaa'; data: string } | ObservableBuiltInEvent<{ test: string }>,
-	'add'
->;
-
-type ZZZ1 = ObservableEventData<
-	{ a: string },
-	{ type: 'ZZZ'; data: number },
-	'add'
->;
-type ZZZ2 = ObservableEventData<
-	{ a: string },
-	{ type: 'ZZZ'; data: number },
-	'ZZZ'
->;
-type ZZZ3 = ObservableEventData<{ a: string }, { type: 'ZZZ'; data: number }>;

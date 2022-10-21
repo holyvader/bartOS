@@ -6,7 +6,7 @@ import { useMount } from '@ui/utils/lifecycle/useMount';
 
 export function useAppBoot() {
 	useMount(() => {
-		system.boot({
+		return system.boot({
 			systemServices: systemServiceManifests,
 			systemPrograms: systemProgramManifests as unknown as ProgramManifest[], // todo refactor type mapping
 			resources: []

@@ -8,7 +8,7 @@ import { ProgramExecutionService } from '@services/program-execution/services/pr
 
 export function useProgramInstanceList(
 	programExecutionService?: ProgramExecutionService
-): ProgramManifest[] {
+): ProgramInstanceManifest[] {
 	const [manifests, setManifests] = useState<ProgramInstanceManifest[]>(
 		programExecutionService?.getAll() ?? []
 	);

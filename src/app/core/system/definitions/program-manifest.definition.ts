@@ -1,6 +1,5 @@
 import { ProgramDefinition, ProgramType } from './program.definition';
 import { ModuleServiceImpl } from '@system/definitions/module-service.definition';
-import { ModuleServiceName } from '@system/definitions/module-service-manifest.definition';
 
 export { ProgramType };
 

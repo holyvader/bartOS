@@ -1,14 +1,10 @@
-import React from 'react';
 import { ProgramInstanceManifest } from '@system/definitions/program-manifest.definition';
+import { FC } from 'react';
 
-interface PureWrapperProps {
-	children: any;
+interface PureWrapperProps extends WithChildren {
 	manifest: ProgramInstanceManifest;
 }
 
-export const PureWrapper: React.FC<PureWrapperProps> = ({
-	children,
-	manifest
-}) => {
+export const PureWrapper: FC<PureWrapperProps> = ({ children }) => {
 	return <>{children}</>;
 };

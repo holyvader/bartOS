@@ -1,28 +1,30 @@
-import React from 'react';
+import { FC } from 'react';
 import { CloseButton, Paper } from '@mantine/core';
-import { WindowPosition } from './definition/window.definition';
+import { WindowPosition } from '@system/definitions/window.definition';
 import { Box } from '@ui/core/box/Box';
 import { Rnd } from 'react-rnd';
 
-interface WindowProps {
-	children: any;
-	isOpen: boolean;
+interface WindowProps extends WithChildren {
 	position: WindowPosition;
+	visible: boolean;
 	pid: string;
 	onPositionChange(position: WindowPosition): void;
 	onFocus(): void;
 	onClose(): void;
 }
 
-export const Window: React.FC<WindowProps> = ({
+export const Window: FC<WindowProps> = ({
 	children,
-	isOpen,
 	position,
+	visible,
 	onClose,
 	onPositionChange,
 	onFocus,
 	pid
 }) => {
+	if (!visible) {
+		return null;
+	}
 	return (
 		<Rnd
 			dragHandleClassName="title-bar"

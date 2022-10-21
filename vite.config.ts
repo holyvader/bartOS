@@ -1,4 +1,4 @@
-import { defineConfig, mergeConfig } from 'vite';
+import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 
@@ -13,6 +13,10 @@ function coreAlias(corePath: string) {
 	return alias(`./src/app/core${corePath}`);
 }
 
+function appAlias(corePath: string) {
+	return alias(`./src/app/${corePath}`);
+}
+
 // https://vitejs.dev/config/
 export default defineConfig({
 	resolve: {
@@ -23,7 +27,7 @@ export default defineConfig({
 			// MODULES
 			'@programs': moduleAlias('/programs'),
 			'@services': moduleAlias('/services'),
-			'@config': moduleAlias('/config'),
+			'@config': appAlias('/config'),
 			// CORE
 			'@permission': coreAlias('/permission'),
 			'@system': coreAlias('/system'),

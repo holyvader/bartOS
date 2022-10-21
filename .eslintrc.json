@@ -1,10 +1,12 @@
 {
-    "env": {
-        "browser": true,
-        "es2021": true
-    },
-    "extends": [
+	"env": {
+			"browser": true,
+			"es2021": true
+	},
+	"root": true,
+	"extends": [
         "eslint:recommended",
+        "plugin:import/recommended",
         "plugin:react/recommended",
         "plugin:@typescript-eslint/recommended"
     ],
@@ -16,11 +18,87 @@
         "sourceType": "module"
     },
     "plugins": [
+				"import",
         "react",
         "@typescript-eslint"
     ],
+		"settings": {
+			"react": {
+				"version": "detect"
+			},
+			"import/parsers": {
+				"@typescript-eslint/parser": [".ts", ".tsx"]
+			},
+			"import/resolver": {
+				"typescript": {
+					"alwaysTryTypes": true // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
+				}
+			}
+		},
     "rules": {
+			"import/no-unresolved": "error",
 			"react/react-in-jsx-scope": "off",
-			"react/prop-types": "off"
+			"react/prop-types": "off",
+			"no-restricted-imports": ["error", {
+				"patterns": [{
+					"group": ["@mantine/*"],
+					"message": "Use @ui package instead"
+				}]
+			}],
+			"import/no-restricted-paths": [
+				"error",
+				{
+					"zones": [
+						{
+							"target": "./src/app/core",
+							"from": "./src/app/config"
+						},
+						{
+							"target": "./src/app/config",
+							"from": "node_modules/@mantine/*"
+						},
+						{
+							"target": "./src/app/core",
+							"from": "node_modules/@mantine/*",
+							"except": ["./ui"]
+						},
+						{
+							"target": "./src/app/modules",
+							"from": "./src/app/core/permission"
+						},
+						{
+							"target": "./src/app/modules",
+							"from": "./src/app/config"
+						},
+						{
+							"target": "./src/app/modules/hooks",
+							"from": "./src/app/core/system",
+							"except": ["./definitions", "./data", "./data-manipulation"]
+						},
+						{
+							"target": "./src/app/modules/programs",
+							"from": "./src/app/core/system",
+							"except": ["./definitions", "./data", "./data-manipulation"]
+						},
+						{
+							"target": "./src/app/modules/services",
+							"from": "./src/app/core/system",
+							"except": ["./definitions", "./services", "./data", "./data-manipulation", "system.ts"]
+						},
+						{
+							"target": "./src/app/user-home",
+							"from": "./src/app/core"
+						},
+						{
+							"target": "./src/app/user-home",
+							"from": "./src/app/modules"
+						},
+						{
+							"target": "./src/app/user-home",
+							"from": "./src/app/config"
+						}
+					]
+				}
+			]
     }
 }

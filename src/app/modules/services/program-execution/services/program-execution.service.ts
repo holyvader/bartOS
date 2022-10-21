@@ -1,11 +1,14 @@
 import { ModuleServiceImpl } from '@system/definitions/module-service.definition';
 import { system } from '@system/system';
 import { ModuleServiceName } from '@system/definitions/module-service-manifest.definition';
-import { ProgramInstanceRegistry } from '@system/registry/program-instance.registry';
-import { ProgramManifest } from '@system/definitions/program-manifest.definition';
+import {
+	ProgramInstanceManifest,
+	ProgramManifest
+} from '@system/definitions/program-manifest.definition';
 import { ProgramManagerService } from '@system/services/program-manager/program-manager.service';
 import { ProgramInstanceManagerService } from '@system/services/program-instance-manager/program-instance-manager.service';
 import { SystemServiceName } from '@system/definitions/system-service.definition';
+import { ObservableService } from '@system/data/observable/observable.service';
 
 export class ProgramExecutionService implements ModuleServiceImpl {
 	private programManager?: ProgramManagerService;
@@ -28,10 +31,14 @@ export class ProgramExecutionService implements ModuleServiceImpl {
 		const programsToStart = (this.programManager?.getAll() ?? []).filter(
 			(it) => it.runOnStartup
 		);
+		console.info('added this program');
 		this.programInstanceManager?.add(programsToStart);
 	}
 
-	subscribe: ProgramInstanceRegistry['subscribe'] = (type, observer) => {
+	subscribe: ObservableService<ProgramInstanceManifest>['subscribe'] = (
+		type,
+		observer
+	) => {
 		return (
 			this.programInstanceManager?.subscribe(type, observer) ?? (() => true)
 		);

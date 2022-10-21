@@ -13,10 +13,12 @@ export function useProgramInstanceList() {
 		);
 
 		const unsubscribeAddEvent = service?.subscribe('add', (manifests) => {
+			console.info('add', manifests);
 			setManifests((prevManifests) => [...prevManifests, ...manifests]);
 		});
 
 		const unsubscribeRemoveEvent = service?.subscribe('remove', (manifests) => {
+			console.info('removing', manifests);
 			setManifests((prevManifests) => [
 				...prevManifests.filter(
 					(it) => !manifests.map((it) => it.pid).includes(it.pid)
@@ -24,10 +26,11 @@ export function useProgramInstanceList() {
 			]);
 		});
 		return () => {
+			service?.removeAll();
 			unsubscribeAddEvent?.();
 			unsubscribeRemoveEvent?.();
 		};
 	});
-
+	console.info('instance manifests', manifests);
 	return manifests;
 }

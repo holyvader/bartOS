@@ -17,6 +17,10 @@ export class ResourceRegistry {
 		return this.observable.get(id);
 	}
 
+	removeAll() {
+		this.observable.removeAll();
+	}
+
 	subscribe: ObservableService<ResourceDefinition>['subscribe'] = (
 		type,
 		observer

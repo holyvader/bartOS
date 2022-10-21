@@ -25,6 +25,10 @@ export class ProgramInstanceManagerService {
 		);
 	}
 
+	removeAll() {
+		this.programInstanceRegistry.removeAll();
+	}
+
 	subscribe: ProgramInstanceRegistry['subscribe'] = (type, observer) => {
 		return this.programInstanceRegistry.subscribe(type, observer);
 	};

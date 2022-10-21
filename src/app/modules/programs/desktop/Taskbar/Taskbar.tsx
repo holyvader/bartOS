@@ -5,32 +5,40 @@ import { ProgramService } from '@services/program/services/program.service';
 import { TaskbarItem } from '@programs/desktop/Taskbar/ui/TaskbarItem/TaskbarItem';
 import { useProgramList } from '../../../hooks/useProgramList';
 import { Box } from '@ui/core/box/Box';
+import { WindowService } from '@services/window/services/window.service';
 
 interface TaskbarProps {
-	programInstances: { id: string }[];
+	programInstances: { id: string; pid: string }[];
 }
 
 export const Taskbar: FC<
-	TaskbarProps & WithServices<[ProgramExecutionService, ProgramService]>
+	TaskbarProps &
+		WithServices<[ProgramExecutionService, ProgramService, WindowService]>
 > = ({ dependencies, programInstances }) => {
-	const [programExecutionService, programService] = dependencies ?? [];
+	const [programExecutionService, programService, windowService] =
+		dependencies ?? [];
 	const manifests = useProgramList(programService);
+	console.info(programInstances);
 	return (
 		<Box
 			style={style}
 			sx={({ colors }) => ({ backgroundColor: colors.gray[0] })}>
-			{manifests.map((it) => (
-				<TaskbarItem
-					key={it.id}
-					id={it.id}
-					title={it.title}
-					style={{ marginRight: 8 }}
-					onClick={(id) => programExecutionService?.execute(id)}
-					instanceNo={
-						programInstances.filter((instance) => instance.id === it.id).length
-					}
-				/>
-			))}
+			{manifests.map((it) => {
+				const instances = programInstances.filter(
+					(instance) => instance.id === it.id
+				);
+				return (
+					<TaskbarItem
+						key={it.id}
+						id={it.id}
+						title={it.title}
+						style={{ marginRight: 8 }}
+						onExecute={(id) => programExecutionService?.execute(id)}
+						onToggle={() => windowService?.toggle(instances[0]?.pid)}
+						instanceNo={instances.length}
+					/>
+				);
+			})}
 		</Box>
 	);
 };

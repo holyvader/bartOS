@@ -3,7 +3,6 @@ import {
 	ModuleServiceName
 } from '@system/definitions/module-service-manifest.definition';
 import { ObservableService } from '@system/data/observable/observable.service';
-import { ModuleServiceImpl } from '@system/definitions/module-service.definition';
 
 export class ModuleServiceRegistry {
 	private observable = new ObservableService<ModuleServiceManifest>('id');
@@ -20,6 +19,11 @@ export class ModuleServiceRegistry {
 	get(name: ModuleServiceName) {
 		return this.observable.get(name);
 	}
+
+	removeAll() {
+		this.observable.removeAll();
+	}
+
 	subscribe: ObservableService<ModuleServiceManifest>['subscribe'] = (
 		type,
 		observer

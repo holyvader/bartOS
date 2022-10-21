@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "ts-check": "vue-tsc --noEmit"
+    "ts-check": "vue-tsc --noEmit",
+    "eslint-check": "npx eslint . --max-warnings 0 --ext .ts,.tsx src/"
   },
   "dependencies": {
     "@emotion/react": "~11.10.4",
@@ -30,6 +31,8 @@
     "@vitejs/plugin-react": "2.1.0",
     "eslint": "~8.22.0",
     "eslint-config-prettier": "~8.5.0",
+    "eslint-import-resolver-typescript": "^3.5.2",
+    "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-react": "^7.31.8",
     "prettier": "2.7.1",
     "typescript": "~4.8.4",

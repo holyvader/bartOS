@@ -1,5 +1,3 @@
-import { Tuple } from '@mantine/styles/lib/theme/types/Tuple';
-
 export const colors = {
 	primary: [
 		'#c6f8e7',

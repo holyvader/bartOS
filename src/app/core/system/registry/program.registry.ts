@@ -16,6 +16,10 @@ export class ProgramRegistry {
 		return this.observable.get(id);
 	}
 
+	removeAll() {
+		this.observable.removeAll();
+	}
+
 	subscribe: ObservableService<ProgramManifest>['subscribe'] = (
 		type,
 		observer

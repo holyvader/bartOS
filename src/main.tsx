@@ -1,6 +1,6 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { AllProviders } from './app/modules/config/AllProviders';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { AllProviders } from '@config/AllProviders';
 import { App } from './app/App';
 
 const root = document.getElementById('root');
@@ -10,11 +10,11 @@ if (!root) {
 		'No app root. Check that the element with id="root" exists in your DOM.'
 	);
 } else {
-	ReactDOM.createRoot(root).render(
-		<React.StrictMode>
+	createRoot(root).render(
+		<StrictMode>
 			<AllProviders>
 				<App />
 			</AllProviders>
-		</React.StrictMode>
+		</StrictMode>
 	);
 }

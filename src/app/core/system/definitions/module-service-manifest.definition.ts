@@ -1,11 +1,9 @@
-import {
-	ModuleServiceDefinition,
-	ModuleServiceImpl
-} from '@system/definitions/module-service.definition';
+import { ModuleServiceDefinition } from '@system/definitions/module-service.definition';
 
 export enum ModuleServiceName {
 	PROGRAM = 'program',
 	PROGRAM_EXECUTION = 'program-execution',
+	WINDOW = 'window',
 	RESOURCE = 'resource',
 	USER = 'user'
 }

@@ -10,6 +10,7 @@ import { ResourceDefinition } from '@system/definitions/resource.definition';
 import { ProgramManagerService } from '@system/services/program-manager/program-manager.service';
 import { ResourceManagerService } from '@system/services/resource-manager/resource-manager.service';
 import { SystemServiceProviderService } from '@system/services/system-service-provider/system-service-provider.service';
+import { WindowManagerService } from '@system/services/window-manager/window-manager.service';
 
 interface BootOptions {
 	systemServices: ModuleServiceManifest[];
@@ -23,6 +24,7 @@ export class System {
 	protected programInstanceManager: ProgramInstanceManagerService;
 	protected programManager: ProgramManagerService;
 	protected resourceManager: ResourceManagerService;
+	protected windowManager: WindowManagerService;
 
 	constructor(
 		protected services: ModuleServiceRegistry,
@@ -36,10 +38,12 @@ export class System {
 		);
 		this.programManager = new ProgramManagerService(programs);
 		this.resourceManager = new ResourceManagerService(resources);
+		this.windowManager = new WindowManagerService();
 		this.systemServiceManager = new SystemServiceProviderService(
 			this.programInstanceManager,
 			this.programManager,
-			this.resourceManager
+			this.resourceManager,
+			this.windowManager
 		);
 	}
 
@@ -48,6 +52,12 @@ export class System {
 		this.programs.register(options.systemPrograms);
 		this.resources.register(options.resources);
 		this.bootServices();
+
+		return () => {
+			this.services.removeAll();
+			this.programs.removeAll();
+			this.resources.removeAll();
+		};
 	}
 
 	private bootServices() {

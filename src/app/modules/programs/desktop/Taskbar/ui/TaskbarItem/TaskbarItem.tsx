@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react';
+import { CSSProperties, FC, MouseEvent } from 'react';
 import { Button } from '@ui/core/buttons/Button';
 
 interface TaskbarItemProps {
@@ -6,22 +6,30 @@ interface TaskbarItemProps {
 	id: string;
 	title: string;
 	style?: CSSProperties;
-	onClick?(id: string): void;
+	onExecute(id: string): void;
+	onToggle(id: string): void;
 }
 
-export const TaskbarItem: React.FC<TaskbarItemProps> = ({
+export const TaskbarItem: FC<TaskbarItemProps> = ({
 	instanceNo,
 	id,
 	title,
-	onClick,
+	onExecute,
+	onToggle,
 	style
 }) => {
+	const handleClick = (e: MouseEvent) => {
+		e.persist();
+		console.info(e);
+		if (!instanceNo) {
+			onExecute(id);
+		} else {
+			onToggle(id);
+		}
+	};
+
 	return (
-		<Button
-			onClick={() => {
-				onClick?.(id);
-			}}
-			style={style}>
+		<Button onClick={handleClick} style={style}>
 			{title}[{instanceNo}]
 		</Button>
 	);

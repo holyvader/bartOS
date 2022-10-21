@@ -6,11 +6,12 @@ import { ProgramExecutionService } from '@services/program-execution/services/pr
 import { ProgramService } from '@services/program/services/program.service';
 import { Box } from '@ui/core/box/Box';
 import { useProgramInstanceList } from '../../hooks/useProgramInstanceList';
+import { WindowService } from '@services/window/services/window.service';
 
 export const Desktop: ProgramDefinition<
-	[ProgramExecutionService, ProgramService]
+	[ProgramExecutionService, ProgramService, WindowService]
 > = ({ dependencies }) => {
-	const [programExecutionService, programService] = dependencies ?? [];
+	const [programExecutionService] = dependencies ?? [];
 	const manifests = useProgramInstanceList(programExecutionService);
 	return (
 		<Box style={style}>

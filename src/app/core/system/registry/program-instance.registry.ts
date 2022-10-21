@@ -3,7 +3,6 @@ import {
 	ProgramInstanceManifest
 } from '@system/definitions/program-manifest.definition';
 import { ObservableService } from '@system/data/observable/observable.service';
-import { ModuleServiceImpl } from '@system/definitions/module-service.definition';
 
 let uniqueId = 1;
 
@@ -17,6 +16,11 @@ export class ProgramInstanceRegistry {
 
 	remove(pids: string[]) {
 		this.observable.remove(pids);
+		return this;
+	}
+
+	removeAll() {
+		this.observable.removeAll();
 		return this;
 	}
 

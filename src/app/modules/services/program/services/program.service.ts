@@ -1,9 +1,10 @@
 import { ModuleServiceImpl } from '@system/definitions/module-service.definition';
 import { system } from '@system/system';
 import { ModuleServiceName } from '@system/definitions/module-service-manifest.definition';
-import { ProgramRegistry } from '@system/registry/program.registry';
 import { ProgramManagerService } from '@system/services/program-manager/program-manager.service';
 import { SystemServiceName } from '@system/definitions/system-service.definition';
+import { ObservableService } from '@system/data/observable/observable.service';
+import { ProgramManifest } from '@system/definitions/program-manifest.definition';
 
 export class ProgramService implements ModuleServiceImpl {
 	private programManager?: ProgramManagerService;
@@ -27,7 +28,10 @@ export class ProgramService implements ModuleServiceImpl {
 		return this.programManager?.getAll() ?? [];
 	}
 
-	subscribe: ProgramRegistry['subscribe'] = (type, observer) => {
+	subscribe: ObservableService<ProgramManifest>['subscribe'] = (
+		type,
+		observer
+	) => {
 		return this.programManager?.subscribe(type, observer) ?? (() => true);
 	};
 }
