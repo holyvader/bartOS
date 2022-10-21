@@ -17,7 +17,6 @@ export class WindowService implements ModuleServiceImpl {
 	}
 	toggle(pid?: string) {
 		if (pid) {
-			console.info('toggle');
 			this.windowManager?.toggle(pid);
 		}
 	}

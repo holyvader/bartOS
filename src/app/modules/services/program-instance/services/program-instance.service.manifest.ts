@@ -2,11 +2,11 @@ import {
 	moduleServiceManifestDefinition,
 	ModuleServiceName
 } from '@system/definitions/module-service-manifest.definition';
-import { ProgramExecutionService } from '../../program-execution/services/program-execution.service';
+import { ProgramInstanceService } from './program-instance.service';
 
 export default moduleServiceManifestDefinition({
-	id: ModuleServiceName.PROGRAM_EXECUTION,
+	id: ModuleServiceName.PROGRAM_INSTANCE,
 	system: true,
 	injectable: true,
-	definition: ProgramExecutionService
+	definition: ProgramInstanceService
 });

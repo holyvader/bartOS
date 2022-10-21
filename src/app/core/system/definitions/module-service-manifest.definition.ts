@@ -2,7 +2,7 @@ import { ModuleServiceDefinition } from '@system/definitions/module-service.defi
 
 export enum ModuleServiceName {
 	PROGRAM = 'program',
-	PROGRAM_EXECUTION = 'program-execution',
+	PROGRAM_INSTANCE = 'program-instance',
 	WINDOW = 'window',
 	RESOURCE = 'resource',
 	USER = 'user'

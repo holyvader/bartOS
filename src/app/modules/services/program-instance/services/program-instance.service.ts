@@ -10,7 +10,7 @@ import { ProgramInstanceManagerService } from '@system/services/program-instance
 import { SystemServiceName } from '@system/definitions/system-service.definition';
 import { ObservableService } from '@system/data/observable/observable.service';
 
-export class ProgramExecutionService implements ModuleServiceImpl {
+export class ProgramInstanceService implements ModuleServiceImpl {
 	private programManager?: ProgramManagerService;
 	private programInstanceManager?: ProgramInstanceManagerService;
 
@@ -53,5 +53,9 @@ export class ProgramExecutionService implements ModuleServiceImpl {
 		if (program) {
 			this.programInstanceManager?.add([program]);
 		}
+	}
+
+	close(pid: string) {
+		this.programInstanceManager?.remove(pid);
 	}
 }

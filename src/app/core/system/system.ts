@@ -57,6 +57,7 @@ export class System {
 			this.services.removeAll();
 			this.programs.removeAll();
 			this.resources.removeAll();
+			this.programInstanceManager.removeAll();
 		};
 	}
 

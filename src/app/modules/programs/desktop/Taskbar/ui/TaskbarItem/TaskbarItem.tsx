@@ -20,7 +20,6 @@ export const TaskbarItem: FC<TaskbarItemProps> = ({
 }) => {
 	const handleClick = (e: MouseEvent) => {
 		e.persist();
-		console.info(e);
 		if (!instanceNo) {
 			onExecute(id);
 		} else {

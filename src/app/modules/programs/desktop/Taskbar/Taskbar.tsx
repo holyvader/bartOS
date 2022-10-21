@@ -1,6 +1,6 @@
 import { WithServices } from '@system/definitions/program.definition';
 import { CSSProperties, FC } from 'react';
-import { ProgramExecutionService } from '@services/program-execution/services/program-execution.service';
+import { ProgramInstanceService } from '@services/program-instance/services/program-instance.service';
 import { ProgramService } from '@services/program/services/program.service';
 import { TaskbarItem } from '@programs/desktop/Taskbar/ui/TaskbarItem/TaskbarItem';
 import { useProgramList } from '../../../hooks/useProgramList';
@@ -13,12 +13,11 @@ interface TaskbarProps {
 
 export const Taskbar: FC<
 	TaskbarProps &
-		WithServices<[ProgramExecutionService, ProgramService, WindowService]>
+		WithServices<[ProgramInstanceService, ProgramService, WindowService]>
 > = ({ dependencies, programInstances }) => {
 	const [programExecutionService, programService, windowService] =
 		dependencies ?? [];
 	const manifests = useProgramList(programService);
-	console.info(programInstances);
 	return (
 		<Box
 			style={style}

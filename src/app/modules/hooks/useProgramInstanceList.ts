@@ -4,10 +4,10 @@ import {
 	ProgramInstanceManifest,
 	ProgramManifest
 } from '@system/definitions/program-manifest.definition';
-import { ProgramExecutionService } from '@services/program-execution/services/program-execution.service';
+import { ProgramInstanceService } from '@services/program-instance/services/program-instance.service';
 
 export function useProgramInstanceList(
-	programExecutionService?: ProgramExecutionService
+	programExecutionService?: ProgramInstanceService
 ): ProgramInstanceManifest[] {
 	const [manifests, setManifests] = useState<ProgramInstanceManifest[]>(
 		programExecutionService?.getAll() ?? []
