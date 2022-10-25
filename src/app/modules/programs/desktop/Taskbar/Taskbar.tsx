@@ -1,29 +1,28 @@
 import { WithServices } from '@system/definitions/program.definition';
-import { CSSProperties, FC } from 'react';
+import { FC } from 'react';
 import { ProgramInstanceService } from '@services/program-instance/services/program-instance.service';
 import { ProgramService } from '@services/program/services/program.service';
 import { TaskbarItem } from '@programs/desktop/Taskbar/ui/TaskbarItem/TaskbarItem';
-import { useProgramList } from '../../../hooks/useProgramList';
 import { Box } from '@ui/core/box/Box';
 import { WindowService } from '@services/window/services/window.service';
+import { StyleWithTheme } from '@ui/ui.definition';
+import { ProgramManifest } from '@system/definitions/program-manifest.definition';
+import { WindowProgram } from '@system/definitions/window.definition';
 
 interface TaskbarProps {
-	programInstances: { id: string; pid: string }[];
+	installedPrograms: ProgramManifest[];
+	windowInstances: WindowProgram[];
 }
 
 export const Taskbar: FC<
 	TaskbarProps &
 		WithServices<[ProgramInstanceService, ProgramService, WindowService]>
-> = ({ dependencies, programInstances }) => {
-	const [programExecutionService, programService, windowService] =
-		dependencies ?? [];
-	const manifests = useProgramList(programService);
+> = ({ dependencies, windowInstances, installedPrograms }) => {
+	const [programExecutionService, , windowService] = dependencies ?? [];
 	return (
-		<Box
-			style={style}
-			sx={({ colors }) => ({ backgroundColor: colors.gray[0] })}>
-			{manifests.map((it) => {
-				const instances = programInstances.filter(
+		<Box style={boxStyle}>
+			{installedPrograms.map((it) => {
+				const instances = windowInstances.filter(
 					(instance) => instance.id === it.id
 				);
 				return (
@@ -31,10 +30,11 @@ export const Taskbar: FC<
 						key={it.id}
 						id={it.id}
 						title={it.title}
-						style={{ marginRight: 8 }}
+						icon={it.icon}
+						style={itemStyle}
 						onExecute={(id) => programExecutionService?.execute(id)}
 						onToggle={() => windowService?.toggle(instances[0]?.pid)}
-						instanceNo={instances.length}
+						windowInstances={instances}
 					/>
 				);
 			})}
@@ -42,9 +42,17 @@ export const Taskbar: FC<
 	);
 };
 
-const style: CSSProperties = {
+const boxStyle: StyleWithTheme = ({ colors, spacing }) => ({
+	backgroundColor: colors.primary[6],
+	background: `${colors.primary[6]}`,
 	position: 'fixed',
 	right: 0,
 	bottom: 0,
-	left: 0
-};
+	left: 0,
+	padding: spacing.sm,
+	textAlign: 'center'
+});
+
+const itemStyle: StyleWithTheme = () => ({
+	marginRight: 8
+});

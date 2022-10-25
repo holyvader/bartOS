@@ -4,7 +4,7 @@ import { ProgramInstanceManifest } from '@system/definitions/program-manifest.de
 import { useMount } from '@ui/utils/lifecycle/useMount';
 import { system } from '@system/system';
 import { SystemServiceName } from '@system/definitions/system-service.definition';
-import { WindowPosition } from '@system/definitions/window.definition';
+import { WindowState } from '@system/services/window-manager/window-manager.service';
 
 interface WindowWrapperProps extends WithChildren {
 	manifest: ProgramInstanceManifest;
@@ -14,8 +14,9 @@ export const WindowWrapper: FC<WindowWrapperProps> = ({
 	children,
 	manifest
 }) => {
-	const [position, setPosition] = useState<WindowPosition | undefined>();
-	const [visible, setVisible] = useState<boolean>(true);
+	const [windowState, setWindowState] = useState<WindowState | undefined>(
+		undefined
+	);
 	const programInstanceManager = system.systemServiceManager.getService(
 		SystemServiceName.PROGRAM_INSTANCE_MANAGER
 	);
@@ -25,28 +26,20 @@ export const WindowWrapper: FC<WindowWrapperProps> = ({
 	);
 
 	useMount(() => {
-		const removeFromRegistry = windowManagerService?.add(manifest, setPosition);
-		const unsubscribeOnPositionChange =
-			windowManagerService?.subscribeToPositionChange(
-				manifest.pid,
-				(position) => {
-					setPosition(position);
-				}
-			);
-		const unsubscribeOnVisibilityChange =
-			windowManagerService?.subscribeToVisibilityChange(
-				manifest.pid,
-				(visible) => {
-					setVisible(visible);
-				}
-			);
+		windowManagerService?.add(manifest, setWindowState);
+		const unsubscribe = windowManagerService?.subscribeToStateChange(
+			manifest.pid,
+			(state) => {
+				setWindowState(state);
+			}
+		);
+		windowManagerService?.focus(manifest.pid);
 		return () => {
-			removeFromRegistry?.();
-			unsubscribeOnPositionChange?.();
-			unsubscribeOnVisibilityChange?.();
+			windowManagerService?.remove(manifest.pid);
+			unsubscribe?.();
 		};
 	});
-	if (!position) {
+	if (!windowState) {
 		return null;
 	}
 	return (
@@ -61,9 +54,21 @@ export const WindowWrapper: FC<WindowWrapperProps> = ({
 			onFocus={() => {
 				windowManagerService?.focus(manifest.pid);
 			}}
-			visible={visible}
-			pid={manifest.pid}
-			position={position}>
+			onBlur={() => {
+				windowManagerService?.blur(manifest.pid);
+			}}
+			onMinimize={() => {
+				windowManagerService?.toggleVisibility(manifest.pid);
+			}}
+			onEnterFullScreen={() => {
+				windowManagerService?.enterFullScreen(manifest.pid);
+			}}
+			onExitFullScreen={() => {
+				windowManagerService?.exitFullScreen(manifest.pid);
+			}}
+			state={windowState}
+			title={manifest.title}
+			pid={manifest.pid}>
 			{children}
 		</Window>
 	);

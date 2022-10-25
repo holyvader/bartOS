@@ -15,9 +15,18 @@ export class WindowService implements ModuleServiceImpl {
 	init() {
 		console.info('[windowService] running');
 	}
+
 	toggle(pid?: string) {
 		if (pid) {
-			this.windowManager?.toggle(pid);
+			this.windowManager?.toggleVisibility(pid);
 		}
+	}
+
+	subscribe: WindowManagerService['subscribe'] = (type, observer) => {
+		return this.windowManager?.subscribe(type, observer) ?? (() => true);
+	};
+
+	getAll() {
+		return this.windowManager?.getAll();
 	}
 }

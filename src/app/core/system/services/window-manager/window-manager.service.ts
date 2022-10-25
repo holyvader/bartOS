@@ -1,21 +1,17 @@
 import { ProgramInstanceManifest } from '@system/definitions/program-manifest.definition';
 import { ObservableService } from '@system/data/observable/observable.service';
-import { WindowPosition } from '@system/definitions/window.definition';
+import {
+	WindowPosition,
+	WindowProgram,
+	WindowState
+} from '@system/definitions/window.definition';
 
-interface EventPositionChange {
-	type: 'position';
-	data: { position: WindowPosition; pid: ProgramInstanceManifest['pid'] };
-}
-
-interface EventVisibilityChange {
-	type: 'visibility';
-	data: { visible: boolean; pid: ProgramInstanceManifest['pid'] };
-}
-
-interface WindowProgram extends ProgramInstanceManifest {
-	wid: string;
-	position: EventPositionChange['data']['position'];
-	visible: EventVisibilityChange['data']['visible'];
+interface EventWindowStateChange {
+	type: 'state-change';
+	data: {
+		pid: ProgramInstanceManifest['pid'];
+		state: WindowState;
+	};
 }
 
 export class WindowManagerService {
@@ -23,124 +19,173 @@ export class WindowManagerService {
 
 	private observable = new ObservableService<
 		WindowProgram,
-		EventPositionChange | EventVisibilityChange
+		EventWindowStateChange
 	>('pid');
 
 	add(
 		manifest: ProgramInstanceManifest,
-		onPositionChange: (position: WindowPosition) => void
+		onStateChange: (state: WindowState) => void
 	) {
 		const windowProgram = this.toWindowProgram(manifest);
 		this.observable.add([windowProgram]);
-		onPositionChange(windowProgram.position);
-		return () => {
-			this.remove(manifest.pid);
-		};
+		onStateChange(windowProgram.state);
+		return this;
 	}
 
 	remove(pid: string) {
 		this.observable.remove([pid]);
+		return this;
 	}
 
-	subscribeToPositionChange(
-		pid: string,
-		cb: (position: WindowPosition) => void
-	) {
-		return this.observable.subscribe('position', (data) => {
+	getAll() {
+		return this.observable.getAll();
+	}
+
+	subscribeToStateChange(pid: string, cb: (state: WindowState) => void) {
+		return this.observable.subscribe('state-change', (data) => {
 			if (data.pid === pid) {
-				cb(data.position);
+				cb(data.state);
 			}
 		});
 	}
+
+	subscribe: ObservableService<
+		WindowProgram,
+		EventWindowStateChange
+	>['subscribe'] = (type, observer) => {
+		return this.observable.subscribe(type, observer);
+	};
 
 	changePosition(pid: string, position: WindowPosition) {
-		const windowProgram = this.observable.get(pid);
-		if (windowProgram) {
-			this.observable.replace(pid, {
-				...windowProgram,
-				position
-			});
-			this.observable.triggerEvent({
-				type: 'position',
-				data: {
-					pid,
-					position
-				}
-			});
-		}
+		this.changeState(pid, { position });
+		return this;
 	}
 
-	subscribeToVisibilityChange(
-		pid: string,
-		cb: (visible: EventVisibilityChange['data']['visible']) => void
-	) {
-		return this.observable.subscribe('visibility', (data) => {
-			if (data.pid === pid) {
-				cb(data.visible);
+	toggleVisibility(pid: string) {
+		const windowProgram = this.observable.get(pid);
+		if (windowProgram) {
+			if (
+				!windowProgram.state.visible ||
+				windowProgram.state.zIndex < this.getMaxZIndex()
+			) {
+				this.focus(pid);
+			} else {
+				this.hide(pid);
 			}
-		});
-	}
-
-	changeVisibility(
-		pid: string,
-		visible: EventVisibilityChange['data']['visible']
-	) {
-		const windowProgram = this.observable.get(pid);
-		if (windowProgram) {
-			this.observable.replace(pid, {
-				...windowProgram,
-				visible
-			});
-			this.observable.triggerEvent({
-				type: 'visibility',
-				data: {
-					pid,
-					visible
-				}
-			});
 		}
-	}
-
-	toggle(pid: string) {
-		const windowProgram = this.observable.get(pid);
-		if (windowProgram) {
-			this.changeVisibility(pid, !windowProgram.visible);
-		}
+		return this;
 	}
 
 	focus(pid: string) {
 		const windowProgram = this.observable.get(pid);
-		const allWindows = this.observable.getAll();
-		const maxZIndex = allWindows.reduce<number>((acc, it) => {
-			return acc < it.position.zIndex ? it.position.zIndex : acc;
-		}, 1);
 		if (windowProgram) {
-			const position = {
-				...windowProgram.position,
+			const maxZIndex = this.getMaxZIndex();
+			this.changeAllStates({
+				focused: false
+			});
+			this.changeState(pid, {
+				focused: true,
+				visible: true,
 				zIndex:
-					windowProgram.position.zIndex === maxZIndex
-						? maxZIndex
-						: maxZIndex + 1
-			};
-			this.changePosition(pid, position);
+					windowProgram.state.zIndex === maxZIndex ? maxZIndex : maxZIndex + 1
+			});
 		}
+		return this;
+	}
+
+	blur(pid: string) {
+		this.changeState(pid, {
+			focused: false
+		});
+		return this;
+	}
+
+	hide(pid: string) {
+		this.changeState(pid, {
+			focused: false,
+			visible: false
+		});
+		return this;
+	}
+
+	enterFullScreen(pid: string) {
+		this.changeState(pid, {
+			fullScreen: true
+		});
+	}
+
+	exitFullScreen(pid: string) {
+		this.changeState(pid, {
+			fullScreen: false
+		});
+	}
+
+	changeState(pid: string, state: Partial<WindowState>) {
+		const windowProgram = this.observable.get(pid);
+		if (windowProgram) {
+			const nextState = WindowManagerService.mergeState(
+				state,
+				windowProgram.state
+			);
+			this.observable.replace(pid, {
+				...windowProgram,
+				state: nextState
+			});
+			this.observable.triggerEvent({
+				type: 'state-change',
+				data: {
+					pid,
+					state: nextState
+				}
+			});
+		}
+		return this;
+	}
+	// todo optimize in the future to trigger just one event instead of for each subscriber. Leave for now
+	changeAllStates(state: Partial<WindowState>) {
+		this.observable.getAll().forEach((it) => {
+			this.changeState(it.pid, state);
+		});
+		return this;
+	}
+
+	static mergeState(
+		nextState: Partial<WindowState>,
+		prevState: WindowState
+	): WindowState {
+		return {
+			...prevState,
+			...nextState,
+			position: {
+				...prevState.position,
+				...nextState.position
+			}
+		};
+	}
+
+	getMaxZIndex(): number {
+		const allWindows = this.observable.getAll();
+		return allWindows.reduce<number>((acc, it) => {
+			return acc < it.state.zIndex ? it.state.zIndex : acc;
+		}, 1);
 	}
 
 	toWindowProgram(manifest: ProgramInstanceManifest): WindowProgram {
-		const allWindows = this.observable.getAll();
-		const maxZIndex = allWindows.reduce<number>((acc, it) => {
-			return acc < it.position.zIndex ? it.position.zIndex : acc;
-		}, 1);
+		const maxZIndex = this.getMaxZIndex();
 		return {
 			...manifest,
 			wid: `w-${this.windowId++}`,
-			visible: true,
-			position: {
-				top: this.windowId * 10 + 20,
-				left: this.windowId * 10 + 20,
-				height: 200,
-				width: 200,
-				zIndex: maxZIndex + 1
+			state: {
+				zIndex: maxZIndex + 1,
+				visible: true,
+				focused: true,
+				fullScreen: false,
+				position: {
+					top: this.windowId * 10 + 20,
+					left: this.windowId * 10 + 20,
+					height: 300,
+					width: 400
+				}
 			}
 		};
 	}

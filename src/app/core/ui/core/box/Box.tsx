@@ -1,6 +1,9 @@
 import { FC } from 'react';
-import { Box as _Box, BoxProps } from '@mantine/core';
+import { Box as _Component, BoxProps as _Props } from '@mantine/core';
+import { PropsWithStyleFunction } from '@ui/ui.definition';
 
-export const Box: FC<BoxProps> = (props) => {
-	return <_Box {...props} />;
+type BoxProps = PropsWithStyleFunction<_Props>;
+
+export const Box: FC<BoxProps> = ({ style, ...props }) => {
+	return <_Component {...props} sx={style} />;
 };

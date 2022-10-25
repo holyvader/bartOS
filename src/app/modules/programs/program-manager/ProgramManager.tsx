@@ -1,6 +1,9 @@
 import { ProgramDefinition } from '@system/definitions/program.definition';
 import { ProgramInstanceService } from '@services/program-instance/services/program-instance.service';
 import { Button } from '@ui/core/buttons/Button';
+import { Grid, GridCol } from '@ui/core/grid/Grid';
+import { ActionIcon } from '@ui/core/icons/ActionIcon';
+import { IconX } from '@tabler/icons';
 
 export const ProgramManager: ProgramDefinition<[ProgramInstanceService]> = ({
 	dependencies
@@ -9,17 +12,20 @@ export const ProgramManager: ProgramDefinition<[ProgramInstanceService]> = ({
 
 	const instances = programInstanceService?.getAll() ?? [];
 	return (
-		<ul>
+		<div>
 			{instances.map((it) => (
-				<li key={it.pid}>
-					{it.title} [{it.pid}]
-					{it.userExecutable && (
-						<Button onClick={() => programInstanceService?.close(it.pid)}>
-							Quit
-						</Button>
-					)}
-				</li>
+				<Grid key={it.pid} grow>
+					<GridCol span={6}>{it.title}</GridCol>
+					<GridCol span={2}>{it.pid}</GridCol>
+					<GridCol span={4}>
+						{it.userExecutable && (
+							<ActionIcon onClick={() => programInstanceService?.close(it.pid)}>
+								<IconX />
+							</ActionIcon>
+						)}
+					</GridCol>
+				</Grid>
 			))}
-		</ul>
+		</div>
 	);
 };

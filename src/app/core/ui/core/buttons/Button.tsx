@@ -1,33 +1,27 @@
-import { CSSProperties, FC, MouseEvent } from 'react';
-import { Button as _Button, ButtonProps as _ButtonProps } from '@mantine/core';
+import { FC } from 'react';
+import { Button as _Component, ButtonProps as _Props } from '@mantine/core';
+import {
+	PropsWithColor,
+	PropsWithStyleFunction,
+	PropsWithOptionalOnClick
+} from '@ui/ui.definition';
 
-interface ButtonProps extends WithChildren {
-	size?: _ButtonProps['size'];
-	variant?: _ButtonProps['variant'];
-	color?: 'primary';
-	style?: CSSProperties;
-	className?: string;
-	onClick?(e: MouseEvent): void;
-}
+interface ButtonProps
+	extends WithOptionalChildren,
+		PropsWithStyleFunction<_Props>,
+		PropsWithColor,
+		PropsWithOptionalOnClick {}
 
 export const Button: FC<ButtonProps> = ({
 	children,
 	variant = 'filled',
 	size = 'md',
-	color,
-	onClick,
 	style,
-	className
+	...props
 }) => {
 	return (
-		<_Button
-			variant={variant}
-			size={size}
-			color={color}
-			onClick={onClick}
-			style={style}
-			className={className}>
+		<_Component variant={variant} size={size} {...props} radius="sm" sx={style}>
 			{children}
-		</_Button>
+		</_Component>
 	);
 };

@@ -9,10 +9,12 @@ import { ProgramManagerService } from '@system/services/program-manager/program-
 import { ProgramInstanceManagerService } from '@system/services/program-instance-manager/program-instance-manager.service';
 import { SystemServiceName } from '@system/definitions/system-service.definition';
 import { ObservableService } from '@system/data/observable/observable.service';
+import { WindowManagerService } from '@system/services/window-manager/window-manager.service';
 
 export class ProgramInstanceService implements ModuleServiceImpl {
 	private programManager?: ProgramManagerService;
 	private programInstanceManager?: ProgramInstanceManagerService;
+	private windowManager?: WindowManagerService;
 
 	constructor(public name: ModuleServiceName) {
 		this.programManager = system.systemServiceManager.getService(
@@ -20,6 +22,9 @@ export class ProgramInstanceService implements ModuleServiceImpl {
 		);
 		this.programInstanceManager = system.systemServiceManager.getService(
 			SystemServiceName.PROGRAM_INSTANCE_MANAGER
+		);
+		this.windowManager = system.systemServiceManager.getService(
+			SystemServiceName.WINDOW_MANAGER
 		);
 	}
 
@@ -31,7 +36,6 @@ export class ProgramInstanceService implements ModuleServiceImpl {
 		const programsToStart = (this.programManager?.getAll() ?? []).filter(
 			(it) => it.runOnStartup
 		);
-		console.info('added this program');
 		this.programInstanceManager?.add(programsToStart);
 	}
 
@@ -56,6 +60,7 @@ export class ProgramInstanceService implements ModuleServiceImpl {
 	}
 
 	close(pid: string) {
+		this.windowManager?.remove(pid);
 		this.programInstanceManager?.remove(pid);
 	}
 }

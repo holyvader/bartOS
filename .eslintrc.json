@@ -41,7 +41,7 @@
 			"react/prop-types": "off",
 			"no-restricted-imports": ["error", {
 				"patterns": [{
-					"group": ["@mantine/*"],
+					"group": ["@mantine/*", "@tabler/icons"],
 					"message": "Use @ui package instead"
 				}]
 			}],
@@ -73,7 +73,7 @@
 						{
 							"target": "./src/app/modules/hooks",
 							"from": "./src/app/core/system",
-							"except": ["./definitions", "./data", "./data-manipulation"]
+							"except": ["./definitions", "./services", "./data", "./data-manipulation"]
 						},
 						{
 							"target": "./src/app/modules/programs",

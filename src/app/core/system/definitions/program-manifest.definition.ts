@@ -1,12 +1,16 @@
 import { ProgramDefinition, ProgramType } from './program.definition';
 import { ModuleServiceImpl } from '@system/definitions/module-service.definition';
+import { SystemIcon, SystemIconProps } from '@ui/core/icons/icon.definition';
+import { FC } from 'react';
 
 export { ProgramType };
+export type ProgramIcon = SystemIcon | FC<SystemIconProps>;
 
 interface ProgramManifestOptions<SERVICES extends ModuleServiceImpl[]> {
 	id: string;
 	title: string;
 	type: ProgramType;
+	icon?: ProgramIcon;
 	definition: ProgramDefinition<SERVICES>;
 	dependencies?: ModuleServiceImpl['name'][];
 	runOnStartup?: boolean;
