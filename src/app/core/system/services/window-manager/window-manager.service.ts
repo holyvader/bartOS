@@ -8,8 +8,8 @@ import {
 
 interface EventWindowStateChange {
 	type: 'state-change';
+	context: string[];
 	data: {
-		pid: ProgramInstanceManifest['pid'];
 		state: WindowState;
 	};
 }
@@ -42,10 +42,8 @@ export class WindowManagerService {
 	}
 
 	subscribeToStateChange(pid: string, cb: (state: WindowState) => void) {
-		return this.observable.subscribe('state-change', (data) => {
-			if (data.pid === pid) {
-				cb(data.state);
-			}
+		return this.observable.contextSubscribe('replace', pid, (data) => {
+			cb(data.state);
 		});
 	}
 
@@ -130,13 +128,6 @@ export class WindowManagerService {
 			this.observable.replace(pid, {
 				...windowProgram,
 				state: nextState
-			});
-			this.observable.triggerEvent({
-				type: 'state-change',
-				data: {
-					pid,
-					state: nextState
-				}
 			});
 		}
 		return this;

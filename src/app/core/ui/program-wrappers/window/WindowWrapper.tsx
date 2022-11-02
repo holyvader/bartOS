@@ -4,7 +4,7 @@ import { ProgramInstanceManifest } from '@system/definitions/program-manifest.de
 import { useMount } from '@ui/utils/lifecycle/useMount';
 import { system } from '@system/system';
 import { SystemServiceName } from '@system/definitions/system-service.definition';
-import { WindowState } from '@system/services/window-manager/window-manager.service';
+import { WindowState } from '@system/definitions/window.definition';
 
 interface WindowWrapperProps extends WithChildren {
 	manifest: ProgramInstanceManifest;

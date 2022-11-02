@@ -1,14 +1,20 @@
-import { CSSProperties, FC } from 'react';
-import { Paper } from '@mantine/core';
-import { WindowPosition } from '@system/definitions/window.definition';
+import { FC } from 'react';
+import {
+	WindowPosition,
+	WindowState
+} from '@system/definitions/window.definition';
 import { Rnd } from 'react-rnd';
 import { ProgramIcon } from '@system/definitions/program-manifest.definition';
 import { TitleBar } from '@ui/program-wrappers/window/TitleBar';
 import { useClickOutside } from '@mantine/hooks';
 import { Box } from '@ui/core/box/Box';
 import { StyleWithTheme } from '@ui/ui.definition';
-import { WindowState } from '@system/services/window-manager/window-manager.service';
 import { useBrowserWindowDimension } from '@ui/utils/browser-window/useBrowserWindowDimension';
+import { classNameMerge } from '@ui/utils/classNameMerge';
+import { Paper } from '@ui/core/paper/Paper';
+
+const minHeight = 200;
+const minWidth = 300;
 
 interface WindowProps extends WithChildren {
 	state: WindowState;
@@ -73,6 +79,8 @@ export const Window: FC<WindowProps> = ({
 				x: state.fullScreen ? browserWindowPosition.left : state.position.left,
 				y: state.fullScreen ? browserWindowPosition.top : state.position.top
 			}}
+			minHeight={minHeight}
+			minWidth={minWidth}
 			size={{
 				width: state.fullScreen
 					? browserWindowPosition.width
@@ -82,7 +90,10 @@ export const Window: FC<WindowProps> = ({
 					: state.position.height
 			}}>
 			<Paper
-				style={paperStyle(state.focused)}
+				style={paperStyle}
+				className={classNameMerge({
+					active: state.focused
+				})}
 				shadow={'lg'}
 				withBorder
 				ref={ref}
@@ -103,13 +114,23 @@ export const Window: FC<WindowProps> = ({
 	);
 };
 
-const paperStyle = (isActive: boolean): CSSProperties => ({
-	width: '100%',
-	height: '100%',
-	opacity: isActive ? 1 : 0.7,
-	background: isActive ? undefined : '#ccc'
-});
+const paperStyle: StyleWithTheme = ({ colors }) => {
+	return {
+		transition: `all 0.1s ease-in-out`,
+		width: '100%',
+		height: '100%',
+		opacity: 0.65,
+		background: colors.lightGrey[9],
+		display: 'grid',
+		gridTemplateRows: '48px minmax(0, 1fr)',
+		'&.active': {
+			opacity: 1,
+			background: colors.lightGrey[0]
+		}
+	};
+};
 
 const boxStyle: StyleWithTheme = ({ spacing }) => ({
-	padding: spacing.sm
+	padding: spacing.sm,
+	overflow: 'auto'
 });

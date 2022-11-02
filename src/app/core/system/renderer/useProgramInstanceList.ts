@@ -13,7 +13,7 @@ export function useProgramInstanceList() {
 		);
 
 		const unsubscribeAddEvent = service?.subscribe('add', (manifests) => {
-			setManifests((prevManifests) => [...prevManifests, ...manifests]);
+			setManifests((prevManifests) => prevManifests.concat(manifests));
 		});
 
 		const unsubscribeRemoveEvent = service?.subscribe('remove', (manifests) => {

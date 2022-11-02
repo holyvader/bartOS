@@ -10,7 +10,7 @@ export function useWindowList(windowService?: WindowService): WindowProgram[] {
 
 	useMount(() => {
 		const unsubscribeAddEvent = windowService?.subscribe('add', (windows) => {
-			setManifests((prevWindows) => [...prevWindows, ...windows]);
+			setManifests((prevWindows) => prevWindows.concat(windows));
 		});
 		const unsubscribeChangeState = windowService?.subscribe(
 			'state-change',

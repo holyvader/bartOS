@@ -26,7 +26,6 @@ export class ProgramInstanceManagerService {
 	}
 
 	removeAll() {
-		console.info('removing all windows');
 		this.programInstanceRegistry.removeAll();
 	}
 

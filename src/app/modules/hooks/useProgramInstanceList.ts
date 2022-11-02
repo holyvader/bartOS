@@ -7,14 +7,14 @@ import {
 import { ProgramInstanceService } from '@services/program-instance/services/program-instance.service';
 
 export function useProgramInstanceList(
-	programExecutionService?: ProgramInstanceService
+	programInstanceService?: ProgramInstanceService
 ): ProgramInstanceManifest[] {
 	const [manifests, setManifests] = useState<ProgramInstanceManifest[]>(
-		programExecutionService?.getAll() ?? []
+		programInstanceService?.getAll() ?? []
 	);
 
 	useMount(() => {
-		const unsubscribeAddEvent = programExecutionService?.subscribe(
+		const unsubscribeAddEvent = programInstanceService?.subscribe(
 			'add',
 			(manifests) => {
 				setManifests((prevManifests) => [
@@ -23,7 +23,7 @@ export function useProgramInstanceList(
 				]);
 			}
 		);
-		const unsubscribeRemoveEvent = programExecutionService?.subscribe(
+		const unsubscribeRemoveEvent = programInstanceService?.subscribe(
 			'remove',
 			(manifests) => {
 				setManifests((prevManifests) => [

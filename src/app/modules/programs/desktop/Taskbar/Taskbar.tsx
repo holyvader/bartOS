@@ -43,12 +43,7 @@ export const Taskbar: FC<
 };
 
 const boxStyle: StyleWithTheme = ({ colors, spacing }) => ({
-	backgroundColor: colors.primary[6],
-	background: `${colors.primary[6]}`,
-	position: 'fixed',
-	right: 0,
-	bottom: 0,
-	left: 0,
+	background: colors.lightGrey[6],
 	padding: spacing.sm,
 	textAlign: 'center'
 });

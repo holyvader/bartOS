@@ -1,7 +1,7 @@
 import { CSSProperties, FC } from 'react';
 import { useProgramInstanceList } from '@system/renderer/useProgramInstanceList';
 import { system } from '@system/system';
-import { filterNotEmpty } from '@system/data-manipulation/collection/filter-not-empty';
+import { filterNotEmpty } from '@system/data/collection/filter-not-empty';
 import { getProgramWrapper } from '@system/renderer/getProgramWrapper';
 
 export const ProgramRenderer: FC = () => {

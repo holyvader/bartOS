@@ -5,11 +5,12 @@ import { CSSObject } from '@mantine/core';
 export type Color = 'primary' | 'secondary' | 'darkGrey' | 'lightGrey';
 export type SystemTheme = MantineTheme;
 export type StyleWithTheme = (theme: SystemTheme) => CSSObject;
+export type Css = CSSObject;
 export type PropsWithStyleFunction<PROPS> = Omit<
 	PROPS,
 	'sx' | 'style' | 'color'
 > & {
-	style?: StyleWithTheme;
+	style?: StyleWithTheme | Css;
 };
 
 export interface PropsWithColor {

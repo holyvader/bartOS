@@ -1,5 +1,6 @@
 export interface ObservableEventBase {
 	type: string;
+	context: string[];
 }
 
 export interface EventAdd<T> extends ObservableEventBase {

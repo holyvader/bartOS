@@ -7,6 +7,7 @@ import { WindowService } from '@services/window/services/window.service';
 import { StyleWithTheme } from '@ui/ui.definition';
 import { useWindowList } from '../../hooks/useWindowList';
 import { useProgramList } from '../../hooks/useProgramList';
+import { ResourceViewer } from '@programs/desktop/ResourceViewer/ResourceViewer';
 
 export const Desktop: ProgramDefinition<
 	[ProgramInstanceService, ProgramService, WindowService]
@@ -17,6 +18,7 @@ export const Desktop: ProgramDefinition<
 
 	return (
 		<Box style={style}>
+			<ResourceViewer />
 			<Taskbar
 				dependencies={dependencies}
 				installedPrograms={manifests}
@@ -31,5 +33,8 @@ const style: StyleWithTheme = () => ({
 	top: 0,
 	right: 0,
 	bottom: 0,
-	left: 0
+	left: 0,
+	display: 'grid',
+	gridTemplateColumns: '1fr',
+	gridTemplateRows: 'minmax(0, 1fr) 58px'
 });

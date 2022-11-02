@@ -87,11 +87,12 @@
 						},
 						{
 							"target": "./src/app/user-home",
-							"from": "./src/app/core"
+							"from": "./src/app/core",
+							"except": ["./system/definitions"]
 						},
 						{
 							"target": "./src/app/user-home",
-							"from": "./src/app/modules"
+							"from": "./src/app/modules/programs"
 						},
 						{
 							"target": "./src/app/user-home",

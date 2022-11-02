@@ -1,19 +1,16 @@
 import { Box } from '@ui/core/box/Box';
-import {
-	ActionIcon,
-	CloseButton,
-	CSSObject,
-	Group,
-	Title
-} from '@mantine/core';
-import { useHover } from '@mantine/hooks';
-import { SystemTheme } from '@ui/ui.definition';
+import { Css, StyleWithTheme } from '@ui/ui.definition';
 import { CSSProperties, FC } from 'react';
+import { classNameMerge } from '@ui/utils/classNameMerge';
 import {
 	IconMinus,
+	IconArrowsDiagonalMinimize2,
 	IconArrowsDiagonal,
-	IconArrowsDiagonalMinimize2
-} from '@tabler/icons';
+	ActionIcon
+} from '@ui/core/icons';
+import { CloseButton } from '@ui/core/buttons/CloseButton';
+import { Title } from '@ui/core/typography/Title';
+import { Group } from '@ui/core/group/Group';
 
 interface TitleBarProps {
 	title: string;
@@ -34,10 +31,9 @@ export const TitleBar: FC<TitleBarProps> = ({
 	onEnterFullScreen,
 	onExitFullScreen
 }) => {
-	const { hovered, ref } = useHover();
 	return (
-		<div style={titleBarStyle} className="title-bar" ref={ref}>
-			<Box style={(theme) => boxStyle(theme, hovered && active)}>
+		<div style={titleBarStyle} className="title-bar">
+			<Box style={boxStyle} className={classNameMerge({ active })}>
 				<Title order={6} style={titleStyle}>
 					{title}
 				</Title>
@@ -80,24 +76,21 @@ export const TitleBar: FC<TitleBarProps> = ({
 	);
 };
 
-const boxStyle = ({ colors }: SystemTheme, isFocused: boolean) =>
-	({
-		transition: 'background 0.3s ease-in-out',
-		height: 48,
-		position: 'relative',
-		textAlign: 'center',
-		'&:hover': {
-			background: isFocused
-				? `linear-gradient(180deg, ${colors.lightGrey[6]} 0%, ${colors.lightGrey[1]} 25%, ${colors.lightGrey[0]} 100%)`
-				: undefined
-		}
-	} as CSSObject);
+const boxStyle: StyleWithTheme = ({ colors }) => ({
+	transition: 'all 0.2s ease-in-out',
+	height: 48,
+	position: 'relative',
+	textAlign: 'center',
+	'&.active:hover': {
+		background: colors.lightGrey[6]
+	}
+});
 
 const titleBarStyle: CSSProperties = {
 	cursor: 'move'
 };
 
-const titleStyle: CSSProperties = {
+const titleStyle: Css = {
 	lineHeight: `48px`
 };
 
