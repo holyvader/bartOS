@@ -32,7 +32,7 @@ export const TitleBar: FC<TitleBarProps> = ({
 	onExitFullScreen
 }) => {
 	return (
-		<div style={titleBarStyle} className="title-bar">
+		<Box style={titleBarStyle} className="title-bar">
 			<Box style={boxStyle} className={classNameMerge({ active })}>
 				<Title order={6} style={titleStyle}>
 					{title}
@@ -72,23 +72,25 @@ export const TitleBar: FC<TitleBarProps> = ({
 					</Group>
 				</div>
 			</Box>
-		</div>
+		</Box>
 	);
 };
 
-const boxStyle: StyleWithTheme = ({ colors }) => ({
+const boxStyle: StyleWithTheme = ({ colors, radius, colorScheme }) => ({
 	transition: 'all 0.2s ease-in-out',
 	height: 48,
+	borderRadius: `${radius.sm}px ${radius.sm}px 0 0 `,
 	position: 'relative',
 	textAlign: 'center',
 	'&.active:hover': {
-		background: colors.lightGrey[6]
+		background:
+			colorScheme === 'light' ? colors.lightGrey[6] : colors.darkGrey[6]
 	}
 });
 
-const titleBarStyle: CSSProperties = {
+const titleBarStyle: StyleWithTheme = ({ radius }) => ({
 	cursor: 'move'
-};
+});
 
 const titleStyle: Css = {
 	lineHeight: `48px`

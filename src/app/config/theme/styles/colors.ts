@@ -44,7 +44,7 @@ export const colors = {
 		'#f8f8f8',
 		'#F5F5F5',
 		'#ececec',
-		'#e0e0e0',
-		'#d5d5d5'
+		'#a9a9a9',
+		'#939393'
 	] as Tuple<string, 10>
 };

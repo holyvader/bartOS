@@ -8,6 +8,7 @@ import { WindowProgram } from '@system/definitions/window.definition';
 interface TaskbarItemProps {
 	id: string;
 	title: string;
+	isDarkTheme?: boolean;
 	icon?: ProgramIcon;
 	style?: StyleWithTheme;
 	windowInstances: WindowProgram[];
@@ -22,7 +23,8 @@ export const TaskbarItem: FC<TaskbarItemProps> = ({
 	onExecute,
 	onToggle,
 	style,
-	icon
+	icon,
+	isDarkTheme
 }) => {
 	const instanceNo = windowInstances.length;
 	const someVisible = windowInstances.some((it) => it.state.visible);
@@ -47,7 +49,7 @@ export const TaskbarItem: FC<TaskbarItemProps> = ({
 				onClick={handleClick}
 				style={style}
 				leftIcon={<Icon size={16} />}
-				color="darkGrey"
+				color={isDarkTheme ? 'lightGrey' : 'darkGrey'}
 				variant={instanceNo && someVisible ? 'filled' : 'outline'}>
 				{title}
 			</Button>

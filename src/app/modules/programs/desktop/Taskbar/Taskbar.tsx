@@ -8,6 +8,8 @@ import { WindowService } from '@services/window/services/window.service';
 import { StyleWithTheme } from '@ui/ui.definition';
 import { ProgramManifest } from '@system/definitions/program-manifest.definition';
 import { WindowProgram } from '@system/definitions/window.definition';
+import { useColorScheme } from '@ui/utils/color-scheme/useColorScheme';
+import { ActionIcon, IconMoon, IconSun } from '@ui/core/icons';
 
 interface TaskbarProps {
 	installedPrograms: ProgramManifest[];
@@ -18,6 +20,7 @@ export const Taskbar: FC<
 	TaskbarProps &
 		WithServices<[ProgramInstanceService, ProgramService, WindowService]>
 > = ({ dependencies, windowInstances, installedPrograms }) => {
+	const { toggleColorScheme, isDark } = useColorScheme();
 	const [programExecutionService, , windowService] = dependencies ?? [];
 	return (
 		<Box style={boxStyle}>
@@ -32,22 +35,39 @@ export const Taskbar: FC<
 						title={it.title}
 						icon={it.icon}
 						style={itemStyle}
+						isDarkTheme={isDark}
 						onExecute={(id) => programExecutionService?.execute(id)}
 						onToggle={() => windowService?.toggle(instances[0]?.pid)}
 						windowInstances={instances}
 					/>
 				);
 			})}
+			<ActionIcon
+				variant="subtle"
+				style={schemeToggleStyle}
+				color={isDark ? 'lightGrey' : 'darkGrey'}
+				onClick={() => toggleColorScheme()}>
+				{isDark ? <IconSun size={18} /> : <IconMoon size={18} />}
+			</ActionIcon>
 		</Box>
 	);
 };
 
-const boxStyle: StyleWithTheme = ({ colors, spacing }) => ({
-	background: colors.lightGrey[6],
+const boxStyle: StyleWithTheme = ({ colors, spacing, colorScheme }) => ({
+	background:
+		colorScheme === 'light' ? colors.lightGrey[6] : colors.darkGrey[6],
 	padding: spacing.sm,
 	textAlign: 'center'
 });
 
 const itemStyle: StyleWithTheme = () => ({
 	marginRight: 8
+});
+
+const schemeToggleStyle: StyleWithTheme = ({ radius }) => ({
+	display: 'inline-block',
+	textAlign: 'center',
+	float: 'right',
+	marginTop: 6,
+	borderRadius: radius.sm
 });

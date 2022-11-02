@@ -6,7 +6,10 @@ export {
 	IconArrowsDiagonalMinimize2,
 	IconMinus,
 	IconFileText,
-	IconFile
+	IconFile,
+	IconMoon,
+	IconSun
 } from '@tabler/icons';
 
 export { ActionIcon } from './ActionIcon';
+export { ThemeIcon } from './ThemeIcon';

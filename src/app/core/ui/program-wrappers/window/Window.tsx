@@ -97,8 +97,7 @@ export const Window: FC<WindowProps> = ({
 				shadow={'lg'}
 				withBorder
 				ref={ref}
-				onMouseDown={onFocus}
-				radius={'sm'}>
+				onMouseDown={onFocus}>
 				<TitleBar
 					title={title}
 					active={state.focused}
@@ -114,18 +113,22 @@ export const Window: FC<WindowProps> = ({
 	);
 };
 
-const paperStyle: StyleWithTheme = ({ colors }) => {
+const paperStyle: StyleWithTheme = ({ colors, colorScheme, radius }) => {
 	return {
 		transition: `all 0.1s ease-in-out`,
 		width: '100%',
 		height: '100%',
-		opacity: 0.65,
-		background: colors.lightGrey[9],
+		opacity: 0.6,
+		borderColor: 'transparent',
+		borderRadius: radius.sm,
+		background:
+			colorScheme === 'light' ? colors.lightGrey[0] : colors.darkGrey[4],
 		display: 'grid',
 		gridTemplateRows: '48px minmax(0, 1fr)',
 		'&.active': {
 			opacity: 1,
-			background: colors.lightGrey[0]
+			background:
+				colorScheme === 'light' ? colors.lightGrey[0] : colors.darkGrey[9]
 		}
 	};
 };

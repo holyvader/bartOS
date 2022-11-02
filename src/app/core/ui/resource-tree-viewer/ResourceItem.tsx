@@ -22,9 +22,14 @@ export const ResourceItem: FC<ResourceItemProps> = ({ type, name }) => {
 	);
 };
 
-const itemStyle: StyleWithTheme = ({ colors, fontSizes, radius }) => ({
+const itemStyle: StyleWithTheme = ({
+	colors,
+	fontSizes,
+	radius,
+	colorScheme
+}) => ({
 	transition: 'all 0.15s ease-in-out',
-	color: colors.lightGrey[6],
+	color: colorScheme === 'light' ? colors.lightGrey[6] : colors.darkGrey[6],
 	fontSize: fontSizes.md,
 	cursor: 'pointer',
 	width: 128,
