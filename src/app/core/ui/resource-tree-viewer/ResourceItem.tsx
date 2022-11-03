@@ -7,17 +7,21 @@ import { Box } from '@ui/core/box/Box';
 interface ResourceItemProps {
 	name: string;
 	type: ResourceType;
+	onClick(): void;
 }
 
-export const ResourceItem: FC<ResourceItemProps> = ({ type, name }) => {
+export const ResourceItem: FC<ResourceItemProps> = ({
+	type,
+	name,
+	onClick
+}) => {
+	const displayName = type === 'dir' ? name : `${name}.${type}`;
 	return (
-		<Box style={itemStyle}>
+		<Box style={itemStyle} onClick={onClick}>
 			<div>
 				<ResourceIcon type={type} size={64} />
 			</div>
-			<div>
-				{name}.{type}
-			</div>
+			<div>{displayName}</div>
 		</Box>
 	);
 };
@@ -29,7 +33,6 @@ const itemStyle: StyleWithTheme = ({
 	colorScheme
 }) => ({
 	transition: 'all 0.15s ease-in-out',
-	color: colorScheme === 'light' ? colors.lightGrey[6] : colors.darkGrey[6],
 	fontSize: fontSizes.md,
 	cursor: 'pointer',
 	width: 128,
@@ -41,6 +44,8 @@ const itemStyle: StyleWithTheme = ({
 	alignItems: 'center',
 	borderRadius: radius.md,
 	'&:hover': {
-		background: `${colors.lightGrey[6]}22`
+		background: `${
+			colorScheme === 'light' ? colors.lightGrey[6] : colors.darkGrey[6]
+		}22`
 	}
 });

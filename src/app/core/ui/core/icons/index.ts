@@ -8,7 +8,10 @@ export {
 	IconFileText,
 	IconFile,
 	IconMoon,
-	IconSun
+	IconSun,
+	IconFolder,
+	IconArrowUp,
+	IconHome
 } from '@tabler/icons';
 
 export { ActionIcon } from './ActionIcon';

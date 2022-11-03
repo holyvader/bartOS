@@ -52,10 +52,10 @@ export class ProgramInstanceService implements ModuleServiceImpl {
 		return this.programInstanceManager?.getAll() ?? [];
 	}
 
-	execute(id: string) {
+	execute(id: string, args?: string) {
 		const program = this.findManifestById(id);
 		if (program) {
-			this.programInstanceManager?.add([program]);
+			this.programInstanceManager?.add([{ ...program, args }]);
 		}
 	}
 

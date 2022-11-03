@@ -107,7 +107,8 @@ export class ObservableService<
 			| ObservableTypes.ObservableBuiltInEvent<T>['type']
 	>(
 		type: SUB_TYPE,
-		observer: ObservableTypes.Observer<T, EVENT, SUB_TYPE>
+		observer: ObservableTypes.Observer<T, EVENT, SUB_TYPE>,
+		options?: { getAllOnInit?: boolean }
 	): ObservableTypes.UnsubscribeFn {
 		// todo resolve type mismatch later
 		this.subscribers.set(
@@ -117,6 +118,14 @@ export class ObservableService<
 				context: null
 			}
 		);
+		if (options?.getAllOnInit) {
+			const data = Array.from(this.store.getAll());
+			this.triggerEvent({
+				type: 'add',
+				context: getContext(data, this.keyName),
+				data
+			});
+		}
 		return () => {
 			this.subscribers.delete(
 				observer as unknown as ObservableTypes.Observer<T, EVENT, TYPE>

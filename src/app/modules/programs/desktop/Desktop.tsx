@@ -18,7 +18,10 @@ export const Desktop: ProgramDefinition<
 
 	return (
 		<Box style={style}>
-			<ResourceViewer />
+			<ResourceViewer
+				installedPrograms={manifests}
+				dependencies={dependencies}
+			/>
 			<Taskbar
 				dependencies={dependencies}
 				installedPrograms={manifests}

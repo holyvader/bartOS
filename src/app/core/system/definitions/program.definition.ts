@@ -14,7 +14,11 @@ export interface WithServices<SERVICES extends ModuleServiceImpl[] = []> {
 	dependencies?: SERVICES;
 }
 
+export interface WithArgs {
+	args?: string;
+}
+
 export type ProgramDefinition<
 	SERVICES extends ModuleServiceImpl[] = [],
 	PROPS = Record<string, unknown>
-> = FC<PROPS & WithServices<SERVICES>>;
+> = FC<PROPS & WithServices<SERVICES> & WithArgs>;

@@ -17,7 +17,7 @@ export const ProgramRenderer: FC = () => {
 				);
 				return (
 					<Wrapper manifest={it} key={it.pid}>
-						<it.definition dependencies={dependencies} />
+						<it.definition dependencies={dependencies} args={it.args} />
 					</Wrapper>
 				);
 			})}

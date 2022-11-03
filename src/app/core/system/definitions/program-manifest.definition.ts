@@ -11,6 +11,7 @@ interface ProgramManifestOptions<SERVICES extends ModuleServiceImpl[]> {
 	title: string;
 	type: ProgramType;
 	icon?: ProgramIcon;
+	args?: string;
 	definition: ProgramDefinition<SERVICES>;
 	dependencies?: ModuleServiceImpl['name'][];
 	runOnStartup?: boolean;

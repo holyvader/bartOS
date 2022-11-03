@@ -6,7 +6,7 @@ import {
 	PropsWithOptionalOnClick
 } from '@ui/ui.definition';
 
-interface ButtonProps
+export interface ButtonProps
 	extends WithOptionalChildren,
 		PropsWithStyleFunction<_Props>,
 		PropsWithColor,

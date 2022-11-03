@@ -78,7 +78,7 @@
 						{
 							"target": "./src/app/modules/programs",
 							"from": "./src/app/core/system",
-							"except": ["./definitions", "./data", "./data-manipulation"]
+							"except": ["./definitions", "./data", "./data-manipulation", "./utils"]
 						},
 						{
 							"target": "./src/app/modules/services",
