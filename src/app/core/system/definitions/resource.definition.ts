@@ -1,3 +1,5 @@
+import { ArgsObject } from '@system/utils/args/args.definition';
+
 export type ResourceDefinition = TextFile | Folder;
 export type ResourceType = ResourceDefinition['type'];
 export type Separator = '/';
@@ -23,4 +25,11 @@ export interface TextFile extends Resource {
 
 export interface Folder extends Resource {
 	type: 'dir';
+}
+
+export interface ResourceArgs extends ArgsObject {
+	rid: ResourceDefinition['rid'];
+	path: ResourceDefinition['path'];
+	name: ResourceDefinition['name'];
+	type: ResourceDefinition['type'];
 }

@@ -162,6 +162,7 @@ export class WindowManagerService {
 	}
 
 	toWindowProgram(manifest: ProgramInstanceManifest): WindowProgram {
+		// will get viewport size and calculate window position based on that
 		const maxZIndex = this.getMaxZIndex();
 		return {
 			...manifest,
@@ -174,8 +175,8 @@ export class WindowManagerService {
 				position: {
 					top: this.windowId * 10 + 20,
 					left: this.windowId * 10 + 20,
-					height: 300,
-					width: 400
+					height: 400,
+					width: 500
 				}
 			}
 		};

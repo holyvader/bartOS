@@ -11,7 +11,8 @@ export {
 	IconSun,
 	IconFolder,
 	IconArrowUp,
-	IconHome
+	IconHome,
+	IconNotebook
 } from '@tabler/icons';
 
 export { ActionIcon } from './ActionIcon';

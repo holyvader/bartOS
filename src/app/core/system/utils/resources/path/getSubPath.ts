@@ -16,11 +16,7 @@ export function getSubPath(
 		return HOME_PATH;
 	}
 	const level = part === -1 ? pathArr.length - 1 : part;
-	console.info(
-		level,
-		pathArr,
-		`${PATH_SEPARATOR}${pathArr.slice(0, level).join(PATH_SEPARATOR)}`
-	);
+
 	return `${PATH_SEPARATOR}${pathArr
 		.slice(0, level)
 		.join(PATH_SEPARATOR)}` as ResourcePath;

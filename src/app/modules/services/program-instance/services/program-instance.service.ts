@@ -10,11 +10,21 @@ import { ProgramInstanceManagerService } from '@system/services/program-instance
 import { SystemServiceName } from '@system/definitions/system-service.definition';
 import { ObservableService } from '@system/data/observable/observable.service';
 import { WindowManagerService } from '@system/services/window-manager/window-manager.service';
+import { ResourceManagerService } from '@system/services/resource-manager/resource-manager.service';
+import {
+	ResourceArgs,
+	ResourceDefinition,
+	RID
+} from '@system/definitions/resource.definition';
+import { DEFAULT_PROGRAMS } from '@services/program-instance/services/DEFAULT_PROGRAMS';
+import { objectToArgs } from '@system/utils/args/objectToArgs';
+import { isFolder } from '@system/utils/resources/type/isFolder';
 
 export class ProgramInstanceService implements ModuleServiceImpl {
 	private programManager?: ProgramManagerService;
 	private programInstanceManager?: ProgramInstanceManagerService;
 	private windowManager?: WindowManagerService;
+	private resourceManager?: ResourceManagerService;
 
 	constructor(public name: ModuleServiceName) {
 		this.programManager = system.systemServiceManager.getService(
@@ -25,6 +35,9 @@ export class ProgramInstanceService implements ModuleServiceImpl {
 		);
 		this.windowManager = system.systemServiceManager.getService(
 			SystemServiceName.WINDOW_MANAGER
+		);
+		this.resourceManager = system.systemServiceManager.getService(
+			SystemServiceName.RESOURCE_MANAGER
 		);
 	}
 
@@ -56,6 +69,24 @@ export class ProgramInstanceService implements ModuleServiceImpl {
 		const program = this.findManifestById(id);
 		if (program) {
 			this.programInstanceManager?.add([{ ...program, args }]);
+		}
+	}
+
+	openResource(resource: ResourceDefinition, args?: string) {
+		const resourceArgs: ResourceArgs = {
+			rid: resource.rid,
+			path: resource.path,
+			name: resource.name,
+			type: resource.type
+		};
+		const programArgs = objectToArgs(resourceArgs);
+		const programId = DEFAULT_PROGRAMS.get(resource.type);
+		const program = programId ? this.findManifestById(programId) : undefined;
+
+		if (program) {
+			this.programInstanceManager?.add([
+				{ ...program, args: `${programArgs} ${args ?? ''}`.trim() }
+			]);
 		}
 	}
 

@@ -5,6 +5,7 @@ import {
 import { FC } from 'react';
 import { useResourcesInPath } from '@ui/resource-tree-viewer/useResourcesInPath';
 import { ResourceItem } from '@ui/resource-tree-viewer/ResourceItem';
+import { Grid, GridCol } from '@ui/core/grid/Grid';
 
 interface ResourceTreeViewerProps {
 	path: ResourcePath;
@@ -17,15 +18,16 @@ export const ResourceTreeViewer: FC<ResourceTreeViewerProps> = ({
 }) => {
 	const resources = useResourcesInPath(path);
 	return (
-		<div>
+		<Grid>
 			{resources.map((it) => (
-				<ResourceItem
-					key={it.rid || it.name}
-					name={it.name}
-					type={it.type}
-					onClick={() => onClick(it)}
-				/>
+				<GridCol key={it.rid || it.name} span="content">
+					<ResourceItem
+						name={it.name}
+						type={it.type}
+						onClick={() => onClick(it)}
+					/>
+				</GridCol>
 			))}
-		</div>
+		</Grid>
 	);
 };

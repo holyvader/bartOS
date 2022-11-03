@@ -6,6 +6,7 @@ import { system } from '@system/system';
 import { SystemServiceName } from '@system/definitions/system-service.definition';
 import { useEffect, useState } from 'react';
 import { filterNotEmpty } from '@system/data/collection/filter-not-empty';
+import { isFolder } from '@system/utils/resources/type/isFolder';
 
 export function useResourcesInPath(path: ResourcePath) {
 	const [resources, setResources] = useState<ResourceDefinition[]>([]);
@@ -15,11 +16,15 @@ export function useResourcesInPath(path: ResourcePath) {
 
 	useEffect(() => {
 		setResources(
-			splitResourcesByFolders(path, resourceManager?.getAll() ?? [])
+			splitResourcesByFolders(path, resourceManager?.getAll() ?? []).sort(
+				sortByTypeAndName
+			)
 		);
 		const unsubscribeAdd = resourceManager?.subscribe('add', (newResources) => {
 			setResources((prevResources) =>
-				splitResourcesByFolders(path, prevResources.concat(newResources))
+				splitResourcesByFolders(path, prevResources.concat(newResources)).sort(
+					sortByTypeAndName
+				)
 			);
 		});
 		const unsubscribeRemove = resourceManager?.subscribe(
@@ -73,4 +78,14 @@ function splitResourcesByFolders(
 			return false;
 		});
 	return result;
+}
+
+function sortByTypeAndName(a: ResourceDefinition, b: ResourceDefinition) {
+	if ((isFolder(a) && isFolder(b)) || (!isFolder(a) && !isFolder(b))) {
+		return a.name.localeCompare(b.name);
+	}
+	if (isFolder(a)) {
+		return -1;
+	}
+	return 1;
 }

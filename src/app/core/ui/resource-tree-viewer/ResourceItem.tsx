@@ -19,7 +19,7 @@ export const ResourceItem: FC<ResourceItemProps> = ({
 	return (
 		<Box style={itemStyle} onClick={onClick}>
 			<div>
-				<ResourceIcon type={type} size={64} />
+				<ResourceIcon type={type} size={48} />
 			</div>
 			<div>{displayName}</div>
 		</Box>
@@ -45,7 +45,7 @@ const itemStyle: StyleWithTheme = ({
 	borderRadius: radius.md,
 	'&:hover': {
 		background: `${
-			colorScheme === 'light' ? colors.lightGrey[6] : colors.darkGrey[6]
+			colorScheme === 'light' ? colors.lightGrey[9] : colors.darkGrey[6]
 		}22`
 	}
 });

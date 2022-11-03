@@ -1,21 +1,20 @@
-import { ArgsObject } from '@system/utils/args/args.definition';
+import { Args, ArgsObject } from '@system/utils/args/args.definition';
 
-export function argsToObject(args: string): ArgsObject {
-	const argsArr = args.split(' ').map((it) => it.replace('--', '').split('='));
-
-	return argsArr.reduce<Record<string, string | number | boolean>>(
-		(acc, [key, value]) => {
-			if (isBoolean(value)) {
-				acc[key] = toBoolean(value);
-			} else if (isNumber(value)) {
-				acc[key] = toNumber(value);
-			} else {
-				acc[key] = value;
-			}
-			return acc;
-		},
-		{}
-	);
+export function argsToObject<T extends ArgsObject = ArgsObject>(args: Args): T {
+	const argsArr = args
+		.replaceAll(' --', ';--')
+		.split(';')
+		.map((it) => it.replace('--', '').replaceAll('"', '').split('='));
+	return argsArr.reduce<ArgsObject>((acc, [key, value]) => {
+		if (isBoolean(value)) {
+			acc[key] = toBoolean(value);
+		} else if (isNumber(value)) {
+			acc[key] = toNumber(value);
+		} else {
+			acc[key] = value;
+		}
+		return acc;
+	}, {} as ArgsObject) as T;
 }
 
 function isBoolean(value: string) {

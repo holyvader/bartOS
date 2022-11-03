@@ -5,7 +5,10 @@ import { ResourceManagerService } from '@system/services/resource-manager/resour
 import { system } from '@system/system';
 import { SystemServiceName } from '@system/definitions/system-service.definition';
 import { ObservableService } from '@system/data/observable/observable.service';
-import { ResourceDefinition } from '@system/definitions/resource.definition';
+import {
+	ResourceDefinition,
+	RID
+} from '@system/definitions/resource.definition';
 
 export class ResourceService implements ModuleServiceImpl {
 	private resourceManagerService?: ResourceManagerService;
@@ -23,6 +26,10 @@ export class ResourceService implements ModuleServiceImpl {
 				?.getAll()
 				.map((it) => it.name)}`
 		);
+	}
+
+	get(rid: RID) {
+		return this.resourceManagerService?.get(rid);
 	}
 
 	subscribe: ObservableService<ResourceDefinition>['subscribe'] = (

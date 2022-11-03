@@ -73,7 +73,7 @@
 						{
 							"target": "./src/app/modules/hooks",
 							"from": "./src/app/core/system",
-							"except": ["./definitions", "./services", "./data", "./data-manipulation"]
+							"except": ["./definitions", "./services", "./data", "./data-manipulation", "./utils"]
 						},
 						{
 							"target": "./src/app/modules/programs",
@@ -83,7 +83,7 @@
 						{
 							"target": "./src/app/modules/services",
 							"from": "./src/app/core/system",
-							"except": ["./definitions", "./services", "./data", "./data-manipulation", "system.ts"]
+							"except": ["./definitions", "./services", "./data", "./data-manipulation", "system.ts", "./utils"]
 						},
 						{
 							"target": "./src/app/user-home",

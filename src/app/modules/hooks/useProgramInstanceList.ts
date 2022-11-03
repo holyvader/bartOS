@@ -28,7 +28,7 @@ export function useProgramInstanceList(
 			(manifests) => {
 				setManifests((prevManifests) => [
 					...prevManifests.filter(
-						(it) => !manifests.map((it) => it.id).includes(it.id)
+						(it) => !manifests.map((it) => it.pid).includes(it.pid)
 					)
 				]);
 			}
