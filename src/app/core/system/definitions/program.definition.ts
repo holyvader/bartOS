@@ -18,7 +18,11 @@ export interface WithArgs {
 	args?: string;
 }
 
+export interface WithPid {
+	pid: string;
+}
+
 export type ProgramDefinition<
 	SERVICES extends ModuleServiceImpl[] = [],
 	PROPS = Record<string, unknown>
-> = FC<PROPS & WithServices<SERVICES> & WithArgs>;
+> = FC<PROPS & WithServices<SERVICES> & WithArgs & WithPid>;

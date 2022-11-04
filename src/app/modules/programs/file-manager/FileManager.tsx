@@ -1,5 +1,5 @@
 import { ProgramDefinition } from '@system/definitions/program.definition';
-import { ResourceTreeViewer } from '@ui/resource-tree-viewer/ResourceTreeViewer';
+import { ResourceTreeBrowser } from '@ui/resource-tree/ResourceTreeBrowser';
 import {
 	ResourceArgs,
 	ResourceDefinition,
@@ -7,8 +7,6 @@ import {
 } from '@system/definitions/resource.definition';
 import { useState } from 'react';
 import { getFolderPath } from '@system/utils/resources/path/getFolderPath';
-import { Breadcrumb } from '@programs/file-manager/breadcrumb/Breadcrumb';
-import { FullHeightStickyTop } from '@ui/layouts/FullHeightStickyTop';
 import { isFolder } from '@system/utils/resources/type/isFolder';
 import { argsToObject } from '@system/utils/args/argsToObject';
 import { HOME_PATH } from '@system/utils/resources/path/homePath';
@@ -34,12 +32,5 @@ export const FileManager: ProgramDefinition<[ProgramInstanceService]> = ({
 			programInstanceService?.openResource(resource);
 		}
 	};
-	return (
-		<FullHeightStickyTop
-			topHeight={42}
-			top={<Breadcrumb path={path} onSetPath={setPath} />}>
-			{/* ResourceTreeViewer should verify user permissions */}
-			<ResourceTreeViewer path={path} onClick={handleClick} />
-		</FullHeightStickyTop>
-	);
+	return <ResourceTreeBrowser path={path} onClick={handleClick} />;
 };

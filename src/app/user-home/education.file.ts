@@ -5,5 +5,5 @@ export default {
 	rid: 'r-education',
 	path: '/desktop/test/deep',
 	type: 'txt',
-	content: 'Its <b>me</b>!'
+	content: 'Education'
 } as ResourceDefinition;

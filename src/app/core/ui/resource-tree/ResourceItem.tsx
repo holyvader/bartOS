@@ -1,7 +1,7 @@
 import { StyleWithTheme } from '@ui/ui.definition';
 import { FC } from 'react';
 import { ResourceType } from '@system/definitions/resource.definition';
-import { ResourceIcon } from '@ui/resource-tree-viewer/ResourceIcon';
+import { ResourceIcon } from '@ui/resource-tree/ResourceIcon';
 import { Box } from '@ui/core/box/Box';
 
 interface ResourceItemProps {

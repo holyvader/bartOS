@@ -1,4 +1,3 @@
-import { ResourceTreeViewer } from '@ui/resource-tree-viewer/ResourceTreeViewer';
 import { FC } from 'react';
 import { Box } from '@ui/core/box/Box';
 import { StyleWithTheme } from '@ui/ui.definition';
@@ -7,8 +6,9 @@ import { WithServices } from '@system/definitions/program.definition';
 import { ProgramInstanceService } from '@services/program-instance/services/program-instance.service';
 import { ProgramService } from '@services/program/services/program.service';
 import { WindowService } from '@services/window/services/window.service';
+import { FolderPreview } from '@ui/resource-tree/FolderPreview';
 
-export const ResourceViewer: FC<
+export const DesktopFolderPreview: FC<
 	WithServices<[ProgramInstanceService, ProgramService, WindowService]>
 > = ({ dependencies }) => {
 	const [programInstanceService] = dependencies ?? [];
@@ -19,7 +19,7 @@ export const ResourceViewer: FC<
 
 	return (
 		<Box style={wrapperStyle}>
-			<ResourceTreeViewer path="/desktop" onClick={handleClick} />
+			<FolderPreview path="/desktop" onClick={handleClick} />
 		</Box>
 	);
 };

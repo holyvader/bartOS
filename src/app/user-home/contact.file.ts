@@ -5,5 +5,5 @@ export default {
 	rid: 'r-contact',
 	path: '/desktop/test',
 	type: 'txt',
-	content: 'Its <b>me</b>!'
+	content: 'Contact!'
 } as ResourceDefinition;

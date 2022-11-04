@@ -1,6 +1,7 @@
 import {
 	ResourceDefinition,
-	ResourcePath
+	ResourcePath,
+	ResourceType
 } from '@system/definitions/resource.definition';
 import { system } from '@system/system';
 import { SystemServiceName } from '@system/definitions/system-service.definition';
@@ -8,7 +9,10 @@ import { useEffect, useState } from 'react';
 import { filterNotEmpty } from '@system/data/collection/filter-not-empty';
 import { isFolder } from '@system/utils/resources/type/isFolder';
 
-export function useResourcesInPath(path: ResourcePath) {
+export function useResourcesInPath(
+	path: ResourcePath,
+	filterByType?: ResourceType
+) {
 	const [resources, setResources] = useState<ResourceDefinition[]>([]);
 	const resourceManager = system.systemServiceManager.getService(
 		SystemServiceName.RESOURCE_MANAGER
@@ -16,15 +20,15 @@ export function useResourcesInPath(path: ResourcePath) {
 
 	useEffect(() => {
 		setResources(
-			splitResourcesByFolders(path, resourceManager?.getAll() ?? []).sort(
-				sortByTypeAndName
-			)
+			splitResourcesByFolders(path, resourceManager?.getAll() ?? [])
+				.sort(sortByTypeAndName)
+				.filter((it) => byType(it, filterByType))
 		);
 		const unsubscribeAdd = resourceManager?.subscribe('add', (newResources) => {
 			setResources((prevResources) =>
-				splitResourcesByFolders(path, prevResources.concat(newResources)).sort(
-					sortByTypeAndName
-				)
+				splitResourcesByFolders(path, prevResources.concat(newResources))
+					.sort(sortByTypeAndName)
+					.filter((it) => byType(it, filterByType))
 			);
 		});
 		const unsubscribeRemove = resourceManager?.subscribe(
@@ -88,4 +92,11 @@ function sortByTypeAndName(a: ResourceDefinition, b: ResourceDefinition) {
 		return -1;
 	}
 	return 1;
+}
+
+function byType(resource: ResourceDefinition, type?: ResourceType) {
+	if (!type || isFolder(resource)) {
+		return true;
+	}
+	return resource?.type === type;
 }

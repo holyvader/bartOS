@@ -5,5 +5,5 @@ export default {
 	rid: 'r-about-me',
 	path: '/desktop',
 	type: 'txt',
-	content: 'Its <b>me</b>!'
+	content: 'About <b>me</b>!'
 } as ResourceDefinition;

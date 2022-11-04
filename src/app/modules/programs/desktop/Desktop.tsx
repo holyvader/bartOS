@@ -7,7 +7,7 @@ import { WindowService } from '@services/window/services/window.service';
 import { StyleWithTheme } from '@ui/ui.definition';
 import { useWindowList } from '../../hooks/useWindowList';
 import { useProgramList } from '../../hooks/useProgramList';
-import { ResourceViewer } from '@programs/desktop/ResourceViewer/ResourceViewer';
+import { DesktopFolderPreview } from '@programs/desktop/FolderPreview/DesktopFolderPreview';
 
 export const Desktop: ProgramDefinition<
 	[ProgramInstanceService, ProgramService, WindowService]
@@ -18,7 +18,7 @@ export const Desktop: ProgramDefinition<
 
 	return (
 		<Box style={style}>
-			<ResourceViewer dependencies={dependencies} />
+			<DesktopFolderPreview dependencies={dependencies} />
 			<Taskbar
 				dependencies={dependencies}
 				installedPrograms={manifests}

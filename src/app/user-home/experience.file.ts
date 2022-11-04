@@ -5,5 +5,5 @@ export default {
 	rid: 'r-experience',
 	path: '/desktop/test',
 	type: 'txt',
-	content: 'Its <b>me</b>!'
+	content: 'Experience'
 } as ResourceDefinition;

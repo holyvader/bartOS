@@ -1,22 +1,25 @@
 import {
 	ResourceDefinition,
-	ResourcePath
+	ResourcePath,
+	ResourceType
 } from '@system/definitions/resource.definition';
 import { FC } from 'react';
-import { useResourcesInPath } from '@ui/resource-tree-viewer/useResourcesInPath';
-import { ResourceItem } from '@ui/resource-tree-viewer/ResourceItem';
+import { useResourcesInPath } from '@ui/resource-tree/useResourcesInPath';
+import { ResourceItem } from '@ui/resource-tree/ResourceItem';
 import { Grid, GridCol } from '@ui/core/grid/Grid';
 
-interface ResourceTreeViewerProps {
+interface FolderPreviewProps {
 	path: ResourcePath;
+	filterByType?: ResourceType;
 	onClick(resource: ResourceDefinition): void;
 }
 
-export const ResourceTreeViewer: FC<ResourceTreeViewerProps> = ({
+export const FolderPreview: FC<FolderPreviewProps> = ({
 	path,
-	onClick
+	onClick,
+	filterByType
 }) => {
-	const resources = useResourcesInPath(path);
+	const resources = useResourcesInPath(path, filterByType);
 	return (
 		<Grid>
 			{resources.map((it) => (
