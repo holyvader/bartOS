@@ -92,7 +92,9 @@ export const Window: FC<WindowProps> = ({
 			<Paper
 				style={paperStyle}
 				className={classNameMerge({
-					active: state.focused
+					active: state.focused,
+					fullScreen: state.fullScreen,
+					windowMode: !state.fullScreen
 				})}
 				shadow={'lg'}
 				withBorder
@@ -125,11 +127,27 @@ const paperStyle: StyleWithTheme = ({ colors, colorScheme, radius }) => {
 			colorScheme === 'light' ? colors.lightGrey[0] : colors.darkGrey[4],
 		display: 'grid',
 		gridTemplateRows: '48px minmax(0, 1fr)',
+
+		'&.fullScreen': {
+			animation: 'fullScreenFadeIn 0.2s ease-in-out',
+			'@keyframes fullScreenFadeIn': {
+				from: { opacity: 0 },
+				to: { opacity: 1 }
+			}
+		},
+		'&.windowMode': {
+			animation: 'windowFadeIn 0.2s ease-in-out',
+			'@keyframes windowFadeIn': {
+				from: { opacity: 0 },
+				to: { opacity: 1 }
+			}
+		},
 		'&.active': {
 			opacity: 1,
 			background:
 				colorScheme === 'light' ? colors.lightGrey[0] : colors.darkGrey[9]
-		}
+		},
+
 	};
 };
 

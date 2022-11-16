@@ -12,7 +12,7 @@ import { Group } from '@ui/core/group/Group';
 import {
 	ResourcePicker,
 	ResourcePickerApi
-} from '@ui/resource-tree/ResourcePicker';
+} from '@ui/resource-tree/picker/ResourcePicker';
 
 export const Notepad: ProgramDefinition<[ResourceService]> = ({
 	args,
