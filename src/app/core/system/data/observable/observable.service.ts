@@ -1,6 +1,6 @@
 import { StoreService } from '@system/data/store/store.service';
 import * as ObservableTypes from '@system/data/observable/obervable.types';
-import { filterNotEmpty } from '@system/data/collection/filter-not-empty';
+import { filterNotEmpty } from '@system/utils/data/collection/filter-not-empty';
 
 export class ObservableService<
 	T extends object,

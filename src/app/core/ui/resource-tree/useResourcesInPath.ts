@@ -6,7 +6,7 @@ import {
 import { system } from '@system/system';
 import { SystemServiceName } from '@system/definitions/system-service.definition';
 import { useEffect, useState } from 'react';
-import { filterNotEmpty } from '@system/data/collection/filter-not-empty';
+import { filterNotEmpty } from '@system/utils/data/collection/filter-not-empty';
 import { isFolder } from '@system/utils/resources/type/isFolder';
 
 export function useResourcesInPath(

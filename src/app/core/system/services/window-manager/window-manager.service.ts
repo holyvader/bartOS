@@ -5,6 +5,7 @@ import {
 	WindowProgram,
 	WindowState
 } from '@system/definitions/window.definition';
+import {getScreenSize} from '@system/utils/screen/size';
 
 interface EventWindowStateChange {
 	type: 'state-change';
@@ -161,9 +162,44 @@ export class WindowManagerService {
 		}, 1);
 	}
 
+	getWindowPosition(width: number, height: number): { top: number; left: number } {
+		const screenSize = getScreenSize();
+		// Super quick. TODO later, better find algorithm. Finding free space is not that easy.
+		const allWindowHorizontalPositions = this.observable.getAll().map( it => [it.state.position.left, it.state.position.left + it.state.position.width]) as Range[];
+		const mergedHorizontalPositions = allWindowHorizontalPositions
+			.reduce<Range[]>(mergeHorizontalRanges, [])
+			.sort(([x1], [x2]) => x1 - x2);
+
+
+		const min = mergedHorizontalPositions[0]?.[0] ?? 10;
+		const max = mergedHorizontalPositions[mergedHorizontalPositions.length - 1]?.[1] ?? screenSize.width - 10;
+		const free: Range[] = [
+			[0, min],
+			[max, screenSize.width]
+		]
+		mergedHorizontalPositions.forEach((range, index) => {
+			if (index > 0) {
+				free.push([mergedHorizontalPositions[index - 1][1], range[0]])
+			}
+		});
+		const freeRange = free.find(([x1, x2]) => {
+			const diff = x2 - x1;
+			return diff > width;
+		})
+		return freeRange ? {
+				top: this.windowId * 10 + 20,
+				left: freeRange[0] + 20
+			} : {
+			top: this.windowId * 10 + 20,
+			left: this.windowId * 10 + 20,
+		}
+	}
+
+
 	toWindowProgram(manifest: ProgramInstanceManifest): WindowProgram {
 		// will get viewport size and calculate window position based on that
 		const maxZIndex = this.getMaxZIndex();
+		console.info(this.getWindowPosition(100, 200));
 		return {
 			...manifest,
 			wid: `w-${this.windowId++}`,
@@ -173,12 +209,34 @@ export class WindowManagerService {
 				focused: true,
 				fullScreen: false,
 				position: {
-					top: this.windowId * 10 + 20,
-					left: this.windowId * 10 + 20,
 					height: 400,
-					width: 500
+					width: 500,
+					...this.getWindowPosition(500, 400)
 				}
 			}
 		};
 	}
+}
+
+type Range = [x1: number, x2: number];
+
+function isBetweenRange(range1: Range, range2: Range): boolean {
+	return ( range2[0] >= range1[0] && range2[0] <= range1[1]) || (range2[1] >= range1[0] && range2[1] <= range1[1]);
+}
+
+function mergeRange(range1: Range, range2: Range): Range {
+	return [Math.min(range1[0], range2[0]), Math.max(range1[1], range2[1])]
+}
+
+function mergeHorizontalRanges(acc: Range[], currentRange: Range) {
+	if (!acc.length) {
+		return [currentRange]
+	}
+	const index = acc.findIndex((el) => isBetweenRange(el, currentRange));
+	if (index !== -1) {
+		acc[index] = mergeRange(acc[index], currentRange)
+	} else {
+		acc.push(currentRange);
+	}
+	return acc;
 }

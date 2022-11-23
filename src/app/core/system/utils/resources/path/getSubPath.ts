@@ -1,7 +1,7 @@
 import { ResourcePath } from '@system/definitions/resource.definition';
 import { PATH_SEPARATOR } from '@system/utils/resources/path/pathSeparator';
 import { HOME_PATH } from '@system/utils/resources/path/homePath';
-import { filterNotEmpty } from '@system/data/collection/filter-not-empty';
+import { filterNotEmpty } from '@system/utils/data/collection/filter-not-empty';
 
 export function getSubPath(
 	path: ResourcePath,
