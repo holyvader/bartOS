@@ -1,18 +1,10 @@
-import { ProgramDefinition } from '@system/definitions/program.definition';
-import { ResourceService } from '@services/resource/services/resource.service';
-import {
-	ResourceArgs,
-	ResourceDefinition
-} from '@system/definitions/resource.definition';
-import { useRef, useState } from 'react';
-import { argsToObject } from '@system/utils/args/argsToObject';
-import { isTextFile } from '@system/utils/resources/type/isTextFile';
-import { Button } from '@ui/core/buttons/Button';
-import { Group } from '@ui/core/group/Group';
-import {
-	ResourcePicker,
-	ResourcePickerApi
-} from '@ui/resource-tree/picker/ResourcePicker';
+import {ResourceService} from '@services/resource/services/resource.service';
+import {ProgramDefinition} from '@system/definitions/program.definition';
+import {ResourceArgs, ResourceDefinition} from '@system/definitions/resource.definition';
+import {argsToObject} from '@system/utils/args/argsToObject';
+import {isTextFile} from '@system/utils/resources/type/isTextFile';
+import {WindowMenu} from '@ui/program-wrappers/window/WindowMenu';
+import {useState} from 'react';
 
 export const Notepad: ProgramDefinition<[ResourceService]> = ({
 	args,
@@ -29,22 +21,18 @@ export const Notepad: ProgramDefinition<[ResourceService]> = ({
 			return undefined;
 		}
 	);
-	const resourcePickerApi = useRef<ResourcePickerApi>(null);
-
-	const handleResourcePickerClick = () => {
-		resourcePickerApi.current?.open(setDefinition, { pid, type: 'txt' });
-	};
 
 	return (
 		<div>
+			<WindowMenu
+				resourceService={resourceService}
+				fileMenu={{ options: [{ label: 'Open file', pid, type: 'open-file', onSelect: setDefinition}]}} customMenus={[]}
+			/>
 			{definition && isTextFile(definition) ? (
 				<div dangerouslySetInnerHTML={{ __html: definition.content }}></div>
 			) : (
 				<>
-					<Group position="center">
-						<Button onClick={handleResourcePickerClick}>Open text file</Button>
-					</Group>
-					<ResourcePicker ref={resourcePickerApi} />
+
 				</>
 			)}
 		</div>

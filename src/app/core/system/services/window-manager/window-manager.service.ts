@@ -24,13 +24,11 @@ export class WindowManagerService {
 	>('pid');
 
 	add(
-		manifest: ProgramInstanceManifest,
-		onStateChange: (state: WindowState) => void
+		manifest: ProgramInstanceManifest
 	) {
 		const windowProgram = this.toWindowProgram(manifest);
 		this.observable.add([windowProgram]);
-		onStateChange(windowProgram.state);
-		return this;
+		return windowProgram.state;
 	}
 
 	remove(pid: string) {
@@ -162,7 +160,7 @@ export class WindowManagerService {
 		}, 1);
 	}
 
-	getWindowPosition(width: number, height: number): { top: number; left: number } {
+	getWindowPosition(width: number): { top: number; left: number } {
 		const screenSize = getScreenSize();
 		// Super quick. TODO later, better find algorithm. Finding free space is not that easy.
 		const allWindowHorizontalPositions = this.observable.getAll().map( it => [it.state.position.left, it.state.position.left + it.state.position.width]) as Range[];
@@ -187,10 +185,10 @@ export class WindowManagerService {
 			return diff > width;
 		})
 		return freeRange ? {
-				top: this.windowId * 10 + 20,
+				top: 20,
 				left: freeRange[0] + 20
 			} : {
-			top: this.windowId * 10 + 20,
+			top: 20,
 			left: this.windowId * 10 + 20,
 		}
 	}
@@ -199,7 +197,6 @@ export class WindowManagerService {
 	toWindowProgram(manifest: ProgramInstanceManifest): WindowProgram {
 		// will get viewport size and calculate window position based on that
 		const maxZIndex = this.getMaxZIndex();
-		console.info(this.getWindowPosition(100, 200));
 		return {
 			...manifest,
 			wid: `w-${this.windowId++}`,
@@ -211,7 +208,7 @@ export class WindowManagerService {
 				position: {
 					height: 400,
 					width: 500,
-					...this.getWindowPosition(500, 400)
+					...this.getWindowPosition(500)
 				}
 			}
 		};

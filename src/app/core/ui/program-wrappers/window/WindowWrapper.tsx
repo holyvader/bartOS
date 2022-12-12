@@ -26,7 +26,7 @@ export const WindowWrapper: FC<WindowWrapperProps> = ({
 	);
 
 	useMount(() => {
-		windowManagerService?.add(manifest, setWindowState);
+		setWindowState(windowManagerService?.add(manifest));
 		const unsubscribe = windowManagerService?.subscribeToStateChange(
 			manifest.pid,
 			(state) => {
@@ -45,7 +45,6 @@ export const WindowWrapper: FC<WindowWrapperProps> = ({
 	return (
 		<Window
 			onClose={() => {
-				// windowManagerService?.remove(manifest.pid);
 				programInstanceManager?.remove(manifest.pid);
 			}}
 			onPositionChange={(position) => {

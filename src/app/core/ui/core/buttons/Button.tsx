@@ -1,10 +1,6 @@
-import { FC } from 'react';
-import { Button as _Component, ButtonProps as _Props } from '@mantine/core';
-import {
-	PropsWithColor,
-	PropsWithStyleFunction,
-	PropsWithOptionalOnClick
-} from '@ui/ui.definition';
+import {Button as _Component, ButtonProps as _Props} from '@mantine/core';
+import {PropsWithColor, PropsWithOptionalOnClick, PropsWithStyleFunction} from '@ui/ui.definition';
+import {forwardRef} from 'react';
 
 export interface ButtonProps
 	extends WithOptionalChildren,
@@ -12,16 +8,18 @@ export interface ButtonProps
 		PropsWithColor,
 		PropsWithOptionalOnClick {}
 
-export const Button: FC<ButtonProps> = ({
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
 	children,
 	variant = 'filled',
 	size = 'md',
 	style,
 	...props
-}) => {
+}, ref) => {
 	return (
-		<_Component variant={variant} size={size} {...props} radius="sm" sx={style}>
+		<_Component ref={ref} variant={variant} size={size} {...props} radius="sm" sx={style}>
 			{children}
 		</_Component>
 	);
-};
+});
+
+Button.displayName = 'Button';

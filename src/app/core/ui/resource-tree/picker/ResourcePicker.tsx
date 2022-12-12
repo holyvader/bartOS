@@ -55,6 +55,7 @@ export const ResourcePicker = forwardRef<ResourcePickerApi>((props, ref) => {
 					filterByType={initialOptions?.type}
 					onClick={(resource) => {
 						onSelectCallback.current?.(resource);
+						setOpen(false);
 						regainWindowFocus();
 					}}
 				/>
@@ -64,5 +65,3 @@ export const ResourcePicker = forwardRef<ResourcePickerApi>((props, ref) => {
 });
 
 ResourcePicker.displayName = 'ResourcePicker';
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-function noop() {}
